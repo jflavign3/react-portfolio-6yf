@@ -1,8 +1,34 @@
 import { holdings } from "./data.js";
 import Kpi from "./Kpi.js";
 import StopLossSlider from "./StopLossSlider.js";
+import { useState, useEffect } from "react";
+
+const url =
+  "https://prtflioapinode.netlify.app/.netlify/functions/api/stock/MSFT%3ANASDAQ";
 
 const HoldingCard = () => {
+  const GetStock = (symbol) => {
+    const [stock, setStock] = useState([]);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          console.log("aaa");
+          const response = await fetch(url);
+          const stock = await response.json();
+          setStock(stock);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchData();
+    }, []);
+
+    return "allo";
+  };
+
+  GetStock("msft");
+
   return (
     <>
       <section className="section" id="tours">
