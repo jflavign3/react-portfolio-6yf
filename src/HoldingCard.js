@@ -3,7 +3,8 @@ import Kpi from "./Kpi.js";
 import StopLossSlider from "./StopLossSlider.js";
 import { useState, useEffect } from "react";
 
-const url = "/.netlify/functions/helloWorld";
+//const url = "/.netlify/functions/helloWorld";
+const url = "/.netlify/functions/getStock";
 
 const HoldingCard = () => {
   const [stock, setStock] = useState("");
@@ -12,13 +13,9 @@ const HoldingCard = () => {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          console.log("aaa");
           const response = await fetch(url);
-          const stock = await response.json();
-
-          setStock(stock);
-
-          console.log(`reswp: ${stock.joke}`);
+          const currentStockPrice = await response.text();
+          setStock(currentStockPrice);
         } catch (error) {
           console.log(error);
         }
@@ -29,7 +26,7 @@ const HoldingCard = () => {
     return "allo";
   };
 
-  GetStock("msft");
+  GetStock("MSFT:NASDAQ");
 
   return (
     <>
@@ -53,10 +50,7 @@ const HoldingCard = () => {
                 <div className="holding-info">
                   <div className="holding-card-row1">
                     <h4>{name}</h4>
-                    <h4 id="currentPrice">
-                      ${currentPrice}
-                      {stock.joke}
-                    </h4>
+                    <h4 id="currentPrice">{stock}</h4>
                   </div>
                   <div className="holding-card-row2">
                     <span>{ticker}</span>
