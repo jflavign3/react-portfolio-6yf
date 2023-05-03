@@ -22,7 +22,8 @@
     "local-build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "netlify dev"
+    "dev": "netlify dev",
+    "debug": "netlify dev --inspect"
   },
   "eslintConfig": {
     "extends": [

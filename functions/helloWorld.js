@@ -14,6 +14,7 @@ exports.handler = async (event, context) => {
         Accept: "application/json",
       },
     });
+    debugger;
     const jsonStock = await pageStream.json();
     return {
       statusCode: 200,

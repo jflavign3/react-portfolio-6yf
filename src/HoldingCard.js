@@ -4,35 +4,73 @@ import StopLossSlider from "./StopLossSlider.js";
 import { useState, useEffect } from "react";
 
 //const url = "/.netlify/functions/helloWorld";
-const url = "/.netlify/functions/getStock";
+const url = "/.netlify/functions/getStock?symbol=";
 
 const HoldingCard = () => {
-  const [stock, setStock] = useState("");
+  const [currentPrice, setCurrentPrice] = useState("");
+  const [stateHoldings, setStateHoldings] = useState([]);
 
-  const GetStock = (symbol) => {
+  /*  const GetStock = (symbol) => {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await fetch(url);
+          const response = await fetch(url + symbol);
           const currentStockPrice = await response.text();
           setStock(currentStockPrice);
+          console.log(`price of ${symbol} = ${currentStockPrice}`);
         } catch (error) {
           console.log(error);
         }
       };
       fetchData();
     }, []);
+  };*/
 
-    return "allo";
+  const InitData = () => {
+    useEffect(() => {
+      const holdingsArray = [];
+      holdings.forEach((holding) => {
+        //debugger;
+
+        //GetStock(symbol); //how to move it out ?
+        const fetchData = async () => {
+          try {
+            const response = await fetch(url + holding.symbol);
+            const currentStockPrice = await response.text();
+            console.log(`price of ${holding.symbol} = ${currentStockPrice}`);
+            holding.currentPrice = currentStockPrice;
+
+            var foundIndex = stateHoldings.findIndex((x) => x.id == holding.id);
+            if (foundIndex == -1) {
+              stateHoldings.push(holding);
+            } else {
+              stateHoldings[foundIndex] = holding; //not need to use setGoldings!
+            }
+            console.log(stateHoldings);
+          } catch (error) {
+            console.log(error);
+          }
+        };
+        ////////////////////////////
+
+        fetchData();
+      });
+    }, []);
   };
 
-  GetStock("MSFT:NASDAQ");
+  //1- get data. loop it and create a new array
+  InitData();
+  //2-for each record  call api to get values
+  //GetStock("META:NASDAQ");
+  //3-update array with values
+
+  //4- render will loop new array
 
   return (
     <>
       <section className="section" id="tours">
         <div className="section-center featured-center">
-          {holdings.map((holding) => {
+          {stateHoldings.map((holding) => {
             const {
               id,
               name,
@@ -50,7 +88,7 @@ const HoldingCard = () => {
                 <div className="holding-info">
                   <div className="holding-card-row1">
                     <h4>{name}</h4>
-                    <h4 id="currentPrice">{stock}</h4>
+                    <h4 id="currentPrice">{currentPrice}</h4>
                   </div>
                   <div className="holding-card-row2">
                     <span>{ticker}</span>

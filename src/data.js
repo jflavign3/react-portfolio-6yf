@@ -2,7 +2,7 @@ export const holdings = [
   {
     id: 1,
     name: "Microsoft Corp",
-    ticker: "MSFT",
+    symbol: "MSFT:NASDAQ",
     currentPrice: 288,
     investment: 5000,
     currentValue: 4900,
@@ -14,7 +14,7 @@ export const holdings = [
   {
     id: 2,
     name: "Meta Platforms",
-    ticker: "META",
+    symbol: "META:NASDAQ",
     currentPrice: 183,
     investment: 3300,
     currentValue: 1305,
@@ -26,7 +26,7 @@ export const holdings = [
   {
     id: 3,
     name: "Google",
-    ticker: "GOOGL",
+    symbol: "GOOGL:NASDAQ",
     currentPrice: 100,
     investment: 1000,
     currentValue: 2100,

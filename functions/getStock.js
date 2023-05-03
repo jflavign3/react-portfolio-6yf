@@ -1,10 +1,12 @@
+//to test, run: netlify functions:serve
 exports.handler = async (event, context) => {
   //import fetch module (ESM dont use require))
   const fetch = (...args) =>
     import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
-  const url = `https://www.google.com/finance/quote/MSFT:NASDAQ`;
-  //const url = `https://www.google.com/finance/quote/${symbol}`;
+  const symbol = event.queryStringParameters.symbol;
+  console.log(`symbole:${symbol}`);
+  const url = `https://www.google.com/finance/quote/${symbol}`;
 
   try {
     const pageStream = await fetch(url);
