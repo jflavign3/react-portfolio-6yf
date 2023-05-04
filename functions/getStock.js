@@ -5,7 +5,7 @@ exports.handler = async (event, context) => {
     import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
   const symbol = event.queryStringParameters.symbol;
-  console.log(`symbole:${symbol}`);
+  //console.log(`symbole:${symbol}`);
   const url = `https://www.google.com/finance/quote/${symbol}`;
 
   try {
@@ -13,7 +13,7 @@ exports.handler = async (event, context) => {
     const body = await pageStream.text();
     var lookupString = "data-last-price";
     var posValueStart = body.indexOf(lookupString) + lookupString.length + 2;
-    console.log(`index:${posValueStart}`);
+    //console.log(`index:${posValueStart}`);
     var posValueEnd = body.indexOf(" ", posValueStart) - 1;
     var price = body.substring(posValueStart, posValueEnd);
 

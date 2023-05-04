@@ -7,64 +7,45 @@ import { useState, useEffect } from "react";
 const url = "/.netlify/functions/getStock?symbol=";
 
 const HoldingCard = () => {
-  const [currentPrice, setCurrentPrice] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [stateHoldings, setStateHoldings] = useState([]);
 
-  /*  const GetStock = (symbol) => {
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await fetch(url + symbol);
-          const currentStockPrice = await response.text();
-          setStock(currentStockPrice);
-          console.log(`price of ${symbol} = ${currentStockPrice}`);
-        } catch (error) {
-          console.log(error);
+  const InitData = async () => {
+    console.log("INIT DATA");
+
+    //'for of' works with await inside, not foreach (for better way see https://gist.github.com/joeytwiddle/37d2085425c049629b80956d3c618971)
+    for (const holding of holdings) {
+      try {
+        const response = await fetch(url + holding.symbol); //coudl remove await and add promises to array, then wait all
+        var currentStockPrice = Number(await response.text());
+        console.log(`price of ${holding.symbol} = ${currentStockPrice}`);
+        holding.currentPrice = currentStockPrice.toFixed(2);
+
+        var foundIndex = stateHoldings.findIndex((x) => x.id == holding.id);
+        if (foundIndex == -1) {
+          stateHoldings.push(holding);
+        } else {
+          stateHoldings[foundIndex] = holding; //not need to use setGoldings!
         }
-      };
-      fetchData();
-    }, []);
-  };*/
-
-  const InitData = () => {
-    useEffect(() => {
-      const holdingsArray = [];
-      holdings.forEach((holding) => {
-        //debugger;
-
-        //GetStock(symbol); //how to move it out ?
-        const fetchData = async () => {
-          try {
-            const response = await fetch(url + holding.symbol);
-            const currentStockPrice = await response.text();
-            console.log(`price of ${holding.symbol} = ${currentStockPrice}`);
-            holding.currentPrice = currentStockPrice;
-
-            var foundIndex = stateHoldings.findIndex((x) => x.id == holding.id);
-            if (foundIndex == -1) {
-              stateHoldings.push(holding);
-            } else {
-              stateHoldings[foundIndex] = holding; //not need to use setGoldings!
-            }
-            console.log(stateHoldings);
-          } catch (error) {
-            console.log(error);
-          }
-        };
-        ////////////////////////////
-
-        fetchData();
-      });
-    }, []);
+        console.log(stateHoldings);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    setIsLoading(false);
   };
 
-  //1- get data. loop it and create a new array
-  InitData();
-  //2-for each record  call api to get values
-  //GetStock("META:NASDAQ");
-  //3-update array with values
+  useEffect(() => {
+    setStateHoldings(holdings); //set inital data without prices, so that the card render immediately. Price will come after
+    InitData();
+  }, []);
 
-  //4- render will loop new array
+  if (isLoading) {
+    console.log("still fetching stock data");
+  }
+  if (!isLoading) {
+    console.log("finished fetching stock data");
+  }
 
   return (
     <>
