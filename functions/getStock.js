@@ -6,40 +6,46 @@ exports.handler = async (event, context) => {
 
   const symbol = event.queryStringParameters.symbol;
   //console.log(`symbole:${symbol}`);
-  const url = `https://www.google.com/finance/quote/${symbol}`;
+  //const url = `https://www.google.com/finance/quote/${symbol}`;
+  const url = `https://finance.yahoo.com/quote/${symbol}`;
+
+  const stock = {
+    price: 0,
+    change: 0,
+  };
 
   try {
     const pageStream = await fetch(url);
     const body = await pageStream.text();
-    var lookupString = "data-last-price";
-    var posValueStart = body.indexOf(lookupString) + lookupString.length + 2;
-    //console.log(`index:${posValueStart}`);
-    var posValueEnd = body.indexOf(" ", posValueStart) - 1;
-    var price = body.substring(posValueStart, posValueEnd);
+    var lookupStartString = body.indexOf(`data-symbol="${symbol}"`); //where to start the document
+    console.log(`index:${lookupStartString}`);
+    var startPos = body.indexOf("value=", lookupStartString) + 7;
+    //console.log(`startPos:${startPos}`);
+    var endPos = body.indexOf(" ", startPos) - 1;
+    //console.log(`endPos:${endPos}`);
+    var price = body.substring(startPos, endPos);
+    //console.log(`price:${price}`);
+    stock.price = price;
+
+    lookupStartString = body.indexOf(
+      `data-field="regularMarketChangePercent"`,
+      lookupStartString
+    ); //where to start the document
+    startPos = body.indexOf("value=", lookupStartString) + 7;
+    //console.log(`startPos:${startPos}`);
+    endPos = body.indexOf(" ", startPos) - 1;
+    //console.log(`endPos:${endPos}`);
+    var change = body.substring(startPos, endPos);
+    //console.log(`change:${change}`);
+    stock.change = change;
 
     return {
       statusCode: 200,
-      body: price,
+      body: JSON.stringify(stock),
     };
   } catch (err) {
     return { statusCode: 422, body: err.stack };
   }
-  // let body = [];
-  /*  var req = https.request(url, (res) => {
-    console.log("connected");
-    /*res.on("data", function (chunk) {
-      body.push(chunk);
-    });
-    res.on("end", function () {
-      body = Buffer.concat(body).toString();
-      var lookupString = "data-last-price";
-      var posValueStart = body.indexOf(lookupString) + lookupString.length + 2;
-      var posValueEnd = body.indexOf(" ", posValueStart) - 1;
-      var price = body.substring(posValueStart, posValueEnd);
-      // resParent.json({ ok: true, price });
-    });
-  });
-  req.end();*/
 };
 
 //how to set an env variable, like a api key : https://www.youtube.com/watch?v=J7RKx8f4Frs

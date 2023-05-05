@@ -21,7 +21,7 @@ function calculateValue(value) {
   return value;
 }
 function calculateChange(movingStopLossValue, props) {
-  var stopLossRatio = 1 - props.currentValue / movingStopLossValue;
+  var stopLossRatio = 1 - props.investment / movingStopLossValue;
   var change = stopLossRatio * 100;
   var price = props.currentPrice - props.currentPrice * (stopLossRatio * -1);
 
@@ -34,9 +34,11 @@ function StopLossSlider(props) {
     setValue(newValue);
   };
 
+  console.log(`From Slider: stopLossValue=${props.stopLossValue}`);
+
   var max =
-    props.stopLossInitialValue > props.currentValue
-      ? props.stopLossInitialValue
+    props.stopLossValue > props.currentValue
+      ? props.stopLossValue
       : props.currentValue;
   max = max * 1.04; //buffer for label
 
@@ -75,7 +77,7 @@ function StopLossSlider(props) {
         }}
       />
       <Typography id="non-linear-slider" gutterBottom>
-        Stop loss at {calculateChange(value, props)}
+        Guranteed {calculateChange(value, props)}
       </Typography>
     </Box>
   );
