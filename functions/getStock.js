@@ -18,13 +18,13 @@ exports.handler = async (event, context) => {
     const pageStream = await fetch(url);
     const body = await pageStream.text();
     var lookupStartString = body.indexOf(`data-symbol="${symbol}"`); //where to start the document
-    console.log(`index:${lookupStartString}`);
+    //console.log(`index:${lookupStartString}`);
     var startPos = body.indexOf("value=", lookupStartString) + 7;
     //console.log(`startPos:${startPos}`);
     var endPos = body.indexOf(" ", startPos) - 1;
     //console.log(`endPos:${endPos}`);
     var price = body.substring(startPos, endPos);
-    //console.log(`price:${price}`);
+    console.log(`price:${price}`);
     stock.price = price;
 
     lookupStartString = body.indexOf(

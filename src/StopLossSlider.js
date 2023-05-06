@@ -20,13 +20,7 @@ function valueLabelFormat(value) {
 function calculateValue(value) {
   return value;
 }
-function calculateChange(movingStopLossValue, props) {
-  var stopLossRatio = 1 - props.investment / movingStopLossValue;
-  var change = stopLossRatio * 100;
-  var price = props.currentPrice - props.currentPrice * (stopLossRatio * -1);
 
-  return change.toFixed(2) + "% (" + price.toFixed(2) + "$)";
-}
 function StopLossSlider(props) {
   const [value, setValue] = React.useState(props.stopLossValue);
 
@@ -77,10 +71,24 @@ function StopLossSlider(props) {
         }}
       />
       <Typography id="non-linear-slider" gutterBottom>
-        Guranteed {calculateChange(value, props)}
+        <p>Stop loss trigger at -{calculateStopLossTrigger(value, props)}</p>
+        Guranteed gain {calculateGuranteed(value, props)}
       </Typography>
     </Box>
   );
+}
+
+function calculateStopLossTrigger(movingStopLossValue, props) {
+  var stopLossRatio = 1 - movingStopLossValue / props.currentValue;
+  var stopLossTrigger = stopLossRatio * 100;
+  var price = props.currentPrice - props.currentPrice * stopLossRatio;
+  return stopLossTrigger.toFixed(2) + "% (" + price.toFixed(2) + "$)";
+}
+
+function calculateGuranteed(movingStopLossValue, props) {
+  var stopLossRatio = (movingStopLossValue / props.investment - 1) * 100;
+  var gain = movingStopLossValue - props.investment;
+  return stopLossRatio.toFixed(2) + "% (" + gain.toFixed(2) + "$)";
 }
 
 export default StopLossSlider;

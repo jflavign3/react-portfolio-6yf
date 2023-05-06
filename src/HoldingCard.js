@@ -3,6 +3,7 @@ import Kpi from "./Kpi.js";
 import StopLossSlider from "./StopLossSlider.js";
 import { useState, useEffect } from "react";
 import loading from "./images/loading.gif";
+import usa from "./images/usa.png";
 
 //const url = "/.netlify/functions/helloWorld";
 const url = "/.netlify/functions/getStock?symbol=";
@@ -77,13 +78,16 @@ const HoldingCard = () => {
                 <div className="holding-info">
                   <div className="holding-card-row1">
                     <h4>{name}</h4>
-                    <h4 id="currentPrice">
-                      {isLoading ? (
-                        <img id="loadImage" alt="loading" src={loading}></img>
-                      ) : (
-                        currentPrice
-                      )}
-                    </h4>
+                    <div id="flag-price">
+                      <img className="flag" alt="usa" src={usa}></img>
+                      <h4 id="currentPrice">
+                        {isLoading ? (
+                          <img id="loadImage" alt="loading" src={loading}></img>
+                        ) : (
+                          currentPrice
+                        )}
+                      </h4>
+                    </div>
                   </div>
                   <div className="holding-card-row2">
                     <span>{ticker}</span>
