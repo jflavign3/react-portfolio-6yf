@@ -359,9 +359,7 @@ Featured Tours
   margin-top: 0.3rem;
   font-size: 0.8rem;
 }
-#dayChange {
-  color: red;
-}
+
 /* additional css for different layout*/
 .holding-card-row1 {
   display: flex;

@@ -4,6 +4,7 @@ import StopLossSlider from "./StopLossSlider.js";
 import { useState, useEffect } from "react";
 import loading from "./images/loading.gif";
 import usa from "./images/usa.png";
+import canada from "./images/canada.png";
 
 //const url = "/.netlify/functions/helloWorld";
 const url = "/.netlify/functions/getStock?symbol=";
@@ -24,6 +25,7 @@ const HoldingCard = () => {
           const { price, change } = await response.json();
 
           console.log(`price of ${holding.symbol} = ${price}`);
+
           holding.currentPrice = Number(price).toFixed(2);
           holding.currentValue = Number(price * holding.qty).toFixed(2);
           holding.dayChange = Number(change * 100).toFixed(2);
@@ -72,6 +74,7 @@ const HoldingCard = () => {
               change,
               stopLossPrice,
               qty,
+              currency,
             } = holding;
             return (
               <article className="holding-card" key={id}>
@@ -79,7 +82,12 @@ const HoldingCard = () => {
                   <div className="holding-card-row1">
                     <h4>{name}</h4>
                     <div id="flag-price">
-                      <img className="flag" alt="usa" src={usa}></img>
+                      {currency === "USD" ? (
+                        <img className="flag" alt="usa" src={usa}></img>
+                      ) : (
+                        <img className="flag" alt="canada" src={canada}></img>
+                      )}
+
                       <h4 id="currentPrice">
                         {isLoading ? (
                           <img id="loadImage" alt="loading" src={loading}></img>
@@ -92,7 +100,14 @@ const HoldingCard = () => {
                   <div className="holding-card-row2">
                     <span>{ticker}</span>
                     <div>
-                      <span id="dayChange">{dayChange}%</span>
+                      <span
+                        id="dayChange"
+                        className={
+                          dayChange >= 0 ? "changePositive" : "changeNegative"
+                        }
+                      >
+                        {dayChange}%
+                      </span>
                       <span> </span>
                       <span>11:34am</span>
                     </div>

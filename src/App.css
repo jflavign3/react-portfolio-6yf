@@ -12,6 +12,26 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+
+#dayChange {
+  font-size: 12px;
+}
+.changePositive:before {
+  content: "\2191";
+  margin-right: 2px;
+}
+.changePositive {
+  color: green;
+}
+
+.changeNegative:before {
+  content: "\2193";
+  margin-right: 2px;
+}
+.changeNegative {
+  color: red;
+}
+
 #loadImage {
   width: 30px;
   height: 30px;
