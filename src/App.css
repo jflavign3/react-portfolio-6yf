@@ -18,6 +18,8 @@
 }
 .changePositive:before {
   content: "\2191";
+  font-family: fantasy;
+  font-weight: bold;
   margin-right: 2px;
 }
 .changePositive {
@@ -26,6 +28,8 @@
 
 .changeNegative:before {
   content: "\2193";
+  font-family: fantasy;
+  font-weight: bold;
   margin-right: 2px;
 }
 .changeNegative {

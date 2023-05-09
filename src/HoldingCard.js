@@ -128,7 +128,7 @@ const HoldingCard = () => {
                       ></Kpi>*/}
                   </div>
 
-                  <div className="holding-card-row3">
+                  <div className="holding-card-row4">
                     <StopLossSlider
                       stopLossValue={stopLossPrice * qty}
                       currentValue={currentValue}
