@@ -381,6 +381,7 @@ Featured Tours
   flex-wrap: wrap;
   font-size: 0.75rem;
   color: var(--clr-grey-5);
+  margin-bottom: 40px;
 }
 .holding-card-row4 {
   display: block;

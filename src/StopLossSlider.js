@@ -64,6 +64,7 @@ function StopLossSlider(props) {
           "& .MuiSlider-markLabel": {
             color: "#1976d2",
             fontWeight: "Bold",
+            paddingRight: "10%",
           },
           "& .MuiSlider-root": {
             marginTop: "40px",
@@ -71,7 +72,8 @@ function StopLossSlider(props) {
         }}
       />
       <Typography id="non-linear-slider" gutterBottom>
-        <p>Stop loss trigger at -{calculateStopLossTrigger(value, props)}</p>
+        Stop loss trigger at -{calculateStopLossTrigger(value, props)}
+        <br />
         Guranteed gain {calculateGuranteed(value, props)}
       </Typography>
     </Box>

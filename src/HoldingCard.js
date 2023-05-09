@@ -16,16 +16,16 @@ const HoldingCard = () => {
   useEffect(() => {
     //must stay inside useEffect, otherwise, must delcare as a useCallback and put ii in the useffect dependency array https://devtrium.com/posts/async-functions-useeffect
     const InitData = async () => {
-      console.log("INIT DATA");
-
       //'for of' works with await inside, not foreach (for better way see https://gist.github.com/joeytwiddle/37d2085425c049629b80956d3c618971)
       for (const holding of holdings) {
         try {
           const response = await fetch(url + holding.symbol); //coudl remove await and add promises to array, then wait all
           const { price, change } = await response.json();
 
-          console.log(`price of ${holding.symbol} = ${price}`);
-
+          //console.log(`price of ${holding.symbol} = ${price}`);
+          var currentdate = new Date();
+          holding.lastUpdate =
+            currentdate.getHours() + ":" + currentdate.getMinutes();
           holding.currentPrice = Number(price).toFixed(2);
           holding.currentValue = Number(price * holding.qty).toFixed(2);
           holding.dayChange = Number(change * 100).toFixed(2);
@@ -109,7 +109,7 @@ const HoldingCard = () => {
                         {dayChange}%
                       </span>
                       <span> </span>
-                      <span>11:34am</span>
+                      <span>{holding.lastUpdate}</span>
                     </div>
                   </div>
 

@@ -11,6 +11,7 @@ export const holdings = [
     stopLossPrice: 250,
     qty: 25,
     currency: "USD",
+    lastUpdate: "",
   },
   {
     id: 2,
@@ -24,6 +25,7 @@ export const holdings = [
     stopLossPrice: 440,
     qty: 10,
     currency: "USD",
+    lastUpdate: "",
   },
   {
     id: 3,
@@ -37,6 +39,7 @@ export const holdings = [
     stopLossPrice: 66,
     qty: 60,
     currency: "USD",
+    lastUpdate: "",
   },
   {
     id: 4,
@@ -50,6 +53,7 @@ export const holdings = [
     stopLossPrice: 40,
     qty: 125,
     currency: "CAD",
+    lastUpdate: "",
   },
   {
     id: 5,
@@ -63,6 +67,7 @@ export const holdings = [
     stopLossPrice: 34,
     qty: 100,
     currency: "USD",
+    lastUpdate: "",
   },
   {
     id: 6,
@@ -76,5 +81,6 @@ export const holdings = [
     stopLossPrice: 48,
     qty: 48,
     currency: "USD",
+    lastUpdate: "",
   },
 ];
