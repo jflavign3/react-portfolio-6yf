@@ -383,7 +383,7 @@ Featured Tours
   color: var(--clr-grey-5);
 }
 .holding-card-row4 {
-  display: flex;
+  display: block;
   justify-content: space-between;
   flex-wrap: wrap;
   line-height: 0;
