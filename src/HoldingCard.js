@@ -37,7 +37,7 @@ const HoldingCard = () => {
           if (foundIndex === -1) {
             stateHoldings.push(holding);
           } else {
-            stateHoldings[foundIndex] = holding; //not need to use setGoldings!
+            stateHoldings[foundIndex] = holding; //no need to use setholdings! bad?
           }
           // console.log(stateHoldings);
         } catch (error) {
