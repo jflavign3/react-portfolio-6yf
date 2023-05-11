@@ -83,4 +83,18 @@ export const holdings = [
     currency: "USD",
     lastUpdate: "",
   },
+  {
+    id: 7,
+    name: "Lion electric",
+    symbol: "LEV.TO",
+    currentPrice: 0,
+    investment: 4635,
+    currentValue: 0,
+    dayChange: 0,
+    change: 0,
+    stopLossPrice: 2.88,
+    qty: 1500,
+    currency: "CAD",
+    lastUpdate: "",
+  },
 ];

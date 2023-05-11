@@ -5,6 +5,8 @@ import Slider from "@mui/material/Slider";
 import "./material.css";
 
 function getMarks(props) {
+  //debugger;
+  //console.log(`Marks${props.currentValue}`);
   return [
     {
       value: props.currentValue,
@@ -28,7 +30,7 @@ function StopLossSlider(props) {
     setValue(newValue);
   };
 
-  console.log(`From Slider: stopLossValue=${props.stopLossValue}`);
+  //console.log(`From Slider: stopLossValue=${props.stopLossValue}`);
 
   var max =
     props.stopLossValue > props.currentValue
@@ -49,12 +51,12 @@ function StopLossSlider(props) {
         min={min}
         step={1}
         max={max}
-        marks={getMarks(props)}
+        marks={props.currentValue && getMarks(props)} //if currentvalue is true (not 0), then call getmarks
         scale={calculateValue}
         getAriaValueText={valueLabelFormat}
         valueLabelFormat={valueLabelFormat}
         onChange={handleChange}
-        valueLabelDisplay="on"
+        valueLabelDisplay={props.currentValue === 0 ? "off" : "on"} //=== 0 is optional
         aria-labelledby="non-linear-slider"
         sx={{
           "& .MuiSlider-mark": {
@@ -72,15 +74,16 @@ function StopLossSlider(props) {
         }}
       />
       <Typography id="non-linear-slider" gutterBottom>
-        Stop loss trigger at -{calculateStopLossTrigger(value, props)}
+        Stop loss trigger: {calculateStopLossTrigger(value, props)}
         <br />
-        Guranteed gain {calculateGuranteed(value, props)}
+        Guranteed gain: {calculateGuranteed(value, props)}
       </Typography>
     </Box>
   );
 }
 
 function calculateStopLossTrigger(movingStopLossValue, props) {
+  if (props.currentValue === 0) return "...loading";
   var stopLossRatio = 1 - movingStopLossValue / props.currentValue;
   var stopLossTrigger = stopLossRatio * 100;
   var price = props.currentPrice - props.currentPrice * stopLossRatio;
