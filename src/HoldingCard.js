@@ -14,7 +14,7 @@ const HoldingCard = () => {
   const [stateHoldings, setStateHoldings] = useState([]);
 
   useEffect(() => {
-    //must stay inside useEffect, otherwise, must delcare as a useCallback and put ii in the useffect dependency array https://devtrium.com/posts/async-functions-useeffect
+    //must stay inside useEffect, otherwise, must declare code as a useCallback and put ii in the useffect dependency array https://devtrium.com/posts/async-functions-useeffect
     const InitData = async () => {
       //'for of' works with await inside, not foreach (for better way see https://gist.github.com/joeytwiddle/37d2085425c049629b80956d3c618971)
       for (const holding of holdings) {
@@ -47,7 +47,8 @@ const HoldingCard = () => {
       setIsLoading(false);
     };
 
-    setStateHoldings(holdings); //set inital data without prices, so that the card render immediately. Price will come after  WHY WARNING?
+    setStateHoldings(holdings); //set inital data without prices, so that the card render immediately. Price will come after
+    //WARNING appears ?
     InitData();
   }, []);
 
