@@ -1,69 +1,67 @@
 import { holdings } from "./data.js";
 import Kpi from "./Kpi.js";
 import StopLossSlider from "./StopLossSlider.js";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import loading from "./images/loading.gif";
 import usa from "./images/usa.png";
 import canada from "./images/canada.png";
+import { GetData } from "./GetData.js";
 
 //const url = "/.netlify/functions/helloWorld";
-const url = "/.netlify/functions/getStock?symbol=";
+let didInit = false;
 
 const HoldingCard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [stateHoldings, setStateHoldings] = useState([]);
 
-  useEffect(() => {
-    //must stay inside useEffect, otherwise, must declare code as a useCallback and put ii in the useffect dependency array https://devtrium.com/posts/async-functions-useeffect
-    const InitData = async () => {
-      //'for of' works with await inside, not foreach (for better way see https://gist.github.com/joeytwiddle/37d2085425c049629b80956d3c618971)
-      for (const holding of holdings) {
-        try {
-          const response = await fetch(url + holding.symbol); //coudl remove await and add promises to array, then wait all
-          const { price, change } = await response.json();
+  const InitData = async () => {
+    //console.log("fetching");
+    //'for of' works with await inside, not foreach (for better way see https://gist.github.com/joeytwiddle/37d2085425c049629b80956d3c618971)
 
-          //console.log(`price of ${holding.symbol} = ${price}`);
-          var currentdate = new Date();
-          holding.lastUpdate =
-            currentdate.getHours() + ":" + currentdate.getMinutes();
-          holding.currentPrice = Number(price).toFixed(2);
-          holding.currentValue = Number(price * holding.qty).toFixed(2);
-          holding.dayChange = Number(change * 100).toFixed(2);
-          holding.change = Number(
-            (holding.currentValue / holding.investment - 1) * 100
-          ).toFixed(2);
-
-          var foundIndex = stateHoldings.findIndex((x) => x.id === holding.id);
-          if (foundIndex === -1) {
-            stateHoldings.push(holding);
-          } else {
-            stateHoldings[foundIndex] = holding; //no need to use setholdings! bad?
-          }
-          // console.log(stateHoldings);
-        } catch (error) {
-          console.log(error);
+    var updatedHoldings = await GetData();
+    //  debugger;
+    for (const holding of updatedHoldings) {
+      try {
+        var foundIndex = stateHoldings.findIndex((x) => x.id === holding.id);
+        if (foundIndex === -1) {
+          stateHoldings.push(holding);
+        } else {
+          stateHoldings[foundIndex] = holding; //no need to use setholdings! bad?
         }
+        // console.log(stateHoldings);
+      } catch (error) {
+        console.log(error);
       }
-      setIsLoading(false);
-    };
+    }
+    setIsLoading(false);
+    console.log(stateHoldings);
+  };
 
+  if (!didInit) {
+    didInit = true;
+    //console.log(`setting did init. Holding data:${holdings.length}`);
     setStateHoldings(holdings); //set inital data without prices, so that the card render immediately. Price will come after
-    //WARNING appears ?
+    //debugger;
+    //console.log("setting to did init " + JSON.stringify(stateHoldings));
+
     InitData();
-  }, []);
+  } else {
+    //console.log("already set to did init " + JSON.stringify(stateHoldings));
+  }
 
   if (isLoading) {
     console.log("still fetching stock data");
   }
   if (!isLoading) {
     console.log("finished fetching stock data");
+    //console.log(stateHoldings);
   }
 
   return (
     <>
       <section className="section" id="tours">
         <div className="section-center featured-center">
-          {stateHoldings.map((holding) => {
+          {stateHoldings.map((currentHolding) => {
             const {
               id,
               name,
@@ -76,7 +74,8 @@ const HoldingCard = () => {
               stopLossPrice,
               qty,
               currency,
-            } = holding;
+              lastUpdate,
+            } = currentHolding;
             return (
               <article className="holding-card" key={id}>
                 <div className="holding-info">
@@ -110,7 +109,7 @@ const HoldingCard = () => {
                         {dayChange}%
                       </span>
                       <span> </span>
-                      <span>{holding.lastUpdate}</span>
+                      <span>{lastUpdate}</span>
                     </div>
                   </div>
 

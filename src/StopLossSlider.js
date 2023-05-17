@@ -71,6 +71,11 @@ function StopLossSlider(props) {
           "& .MuiSlider-root": {
             marginTop: "40px",
           },
+          "& .MuiSlider-valueLabel": {
+            backgroundColor: "gainsboro",
+            color: "#1976d2",
+            fontWeight: "bold",
+          },
         }}
       />
       <Typography id="non-linear-slider" gutterBottom>
