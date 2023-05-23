@@ -1,12 +1,12 @@
 import "./App.css";
 import ErrorBoundary from "./ErrorBoundary";
-import HoldingCard from "./HoldingCard";
+import HoldingCards from "./HoldingCards";
 
 function App() {
   return (
     <>
       <ErrorBoundary>
-        <HoldingCard></HoldingCard>
+        <HoldingCards></HoldingCards>
       </ErrorBoundary>
     </>
   );

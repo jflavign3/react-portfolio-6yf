@@ -5,14 +5,13 @@ import Slider from "@mui/material/Slider";
 import "./material.css";
 
 function getMarks(props) {
-  //debugger;
-  //console.log(`Marks${props.currentValue}`);
-  return [
+  const car = [
     {
-      value: props.currentValue,
-      label: "Current: " + props.currentValue + "$",
+      value: Number(props.currentValue),
+      label: props.currentValue && "Current: " + props.currentValue + "$", //if current value is 0, wont display text
     },
   ];
+  return car;
 }
 
 function valueLabelFormat(value) {
@@ -44,14 +43,16 @@ function StopLossSlider(props) {
       : props.currentValue;
   min = min * 0.9; //give 10% buffer
 
+  const disabled = props.isLocked;
   return (
     <Box sx={{ width: 430 }}>
       <Slider
+        disabled={disabled}
         value={value}
         min={min}
         step={1}
         max={max}
-        marks={props.currentValue && getMarks(props)} //if currentvalue is true (not 0), then call getmarks
+        marks={getMarks(props)} //{props.currentValue && getMarks(props)} //if currentvalue is true (not 0), then call getmarks
         scale={calculateValue}
         getAriaValueText={valueLabelFormat}
         valueLabelFormat={valueLabelFormat}

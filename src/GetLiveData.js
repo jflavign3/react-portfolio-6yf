@@ -2,7 +2,7 @@ import { holdings } from "./data.js";
 
 const url = "/.netlify/functions/getStock?symbol=";
 
-export const GetData = async () => {
+export const GetLiveData = async () => {
   var updatedHoldings = [];
   //'for of' works with await inside, not foreach (for better way see https://gist.github.com/joeytwiddle/37d2085425c049629b80956d3c618971)
   for (const holding of holdings) {
