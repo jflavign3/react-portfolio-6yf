@@ -1,0 +1,114 @@
+//@import "../../assets/variables";
+
+$accentColor: #0088a2; //turqoise
+//$accentColor: #00A862; //green
+//$accentColor: #58AFE0; //blue
+//$accentColor: #56A4AD; //turquoise light
+$menuFont: sans-serif;
+$menubarColor: #f4f5f7; //light grey
+$topbarColor: $accentColor;
+$unselectedMenuItemColor: #696969; //dark grey
+$titleFont: "Raleway", sans-serif;
+
+$SelectedFontSize: 28px;
+$SelectedTextSize: 14px;
+
+@font-face {
+  font-family: sfFont;
+  //src: url(../../assets/SalesforceSans-Bold.woff);
+}
+
+.titleDesktop {
+  display: none;
+}
+
+#setupPage {
+  height: 100%;
+}
+
+#spacer {
+  height: 10px;
+  width: 100%;
+  background-color: white;
+  opacity: 50%;
+}
+
+#masterFlex {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.leftMenuForBigScreen {
+  display: none;
+}
+
+#floatMenu {
+  left: 50px;
+  top: 2px;
+  background-color: #f7f7f7;
+  position: absolute;
+}
+
+.title {
+  color: white;
+  font-size: 20px;
+  //font-family: $titleFont;
+  font-family: sfFont;
+  display: inline-flex;
+  padding-left: 17px;
+}
+
+.topBarVisibleForSmallScreen {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  background-color: $topbarColor;
+  padding: 17px 0 17px 0;
+  z-index: 300;
+}
+.topLeft {
+  display: flex;
+  width: 50px;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+#ellipsisMenu,
+#refresh {
+  color: white;
+  font-size: 25px;
+  padding: 0 10px 0 15px;
+}
+
+#ellipsisMenu:hover {
+  cursor: pointer;
+}
+#bottomMenuForSmallScreen {
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+@media only screen and (min-width: 635px) {
+  .topBarVisibleForSmallScreen,
+  #bottomMenuForSmallScreen {
+    display: none;
+  }
+  .leftMenuForBigScreen {
+    display: block;
+  }
+
+  #setupPage {
+    height: calc(100% - 70px);
+  }
+
+  .titleDesktop {
+    font-family: sfFont;
+    font-size: 20px;
+    margin: 20px 20px 10px 20px;
+    display: block;
+  }
+}

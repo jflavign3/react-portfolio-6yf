@@ -1,0 +1,187 @@
+//@import "../../assets/variables";
+$accentColor: #0088a2; //turqoise
+//$accentColor: #00A862; //green
+//$accentColor: #58AFE0; //blue
+//$accentColor: #56A4AD; //turquoise light
+$menuFont: sans-serif;
+$menubarColor: #f4f5f7; //light grey
+$topbarColor: $accentColor;
+$unselectedMenuItemColor: #696969; //dark grey
+$titleFont: "Raleway", sans-serif;
+
+$SelectedFontSize: 28px;
+$SelectedTextSize: 14px;
+
+#floatMenu {
+  left: 50px;
+  top: -70px;
+  position: relative;
+}
+
+._dropdown-menu {
+  padding: 1px 0;
+  color: #76a6e6;
+  position: absolute;
+  margin: -2px 0 0 0;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px 0 rgba(163, 163, 163, 0.5);
+  border: solid 1px green;
+  z-index: 999;
+  background-color: #f7f7f7;
+  line-height: 26px;
+  min-width: 100px;
+  text-align: left;
+  left: 70px;
+  margin-top: -60px;
+
+  li {
+    list-style-type: none;
+    min-width: 60px;
+    height: 35px;
+    padding: 5px 0 0 10px;
+    color: green;
+  }
+
+  li:hover {
+    cursor: pointer;
+    background-color: #cde2f6;
+  }
+}
+
+.fa-chart:before {
+  content: "\f080";
+}
+.fa-news:before {
+  content: "\f1ea";
+}
+
+#showLogo,
+#showMore {
+  display: none;
+}
+.webOnly {
+  display: none;
+}
+ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-around;
+  margin: 0;
+  min-width: 70px;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  flex: 0 1 auto; /* Default */
+  font-family: $menuFont;
+  text-align: center;
+}
+
+li a {
+  display: block;
+  text-align: center;
+  padding: 8px;
+  text-decoration: none;
+  width: 50px;
+  font-size: $SelectedTextSize;
+}
+li:hover {
+  cursor: pointer;
+}
+li:hover a {
+  color: $accentColor;
+}
+
+li:hover a > i {
+  font-size: $SelectedFontSize;
+}
+li i {
+  font-size: $SelectedFontSize;
+}
+
+.menuBar {
+  width: 150px;
+  width: 100%;
+  box-shadow: 0px -0px 3px rgba(50, 50, 50, 0.75);
+  background-color: $menubarColor;
+  z-index: 999;
+  padding: 10px 30px;
+}
+
+.itemActive {
+  color: $accentColor;
+  //font-size: $SelectedTextSize !important; //text
+}
+.itemActive > i {
+  font-size: $SelectedFontSize !important; //image
+}
+.itemDisabled > i {
+  font-size: $SelectedFontSize !important; //image
+}
+.itemDisabled {
+  color: $unselectedMenuItemColor;
+}
+
+@media only screen and (min-width: 635px) {
+  //$SelectedFontSize: $SelectedFontSize + 8px;
+
+  ul {
+    flex-direction: column;
+    min-width: unset;
+    padding-left: 5px;
+  }
+
+  li {
+    display: block;
+    height: 65px;
+    padding: 0 8px 0 4px;
+
+    a {
+      padding: 0px;
+      width: unset;
+    }
+
+    a > i {
+      //padding-right:4px; //if text right to icon
+    }
+
+    hover a > i,
+    i {
+      font-size: $SelectedFontSize;
+    }
+  }
+
+  .itemActive > i {
+    font-size: $SelectedFontSize !important; //image
+  }
+  #showLogo,
+  #showMore {
+    display: block;
+  }
+  .webOnly {
+    display: block;
+  }
+  #logo {
+    height: $SelectedFontSize + 10px;
+    width: $SelectedFontSize + 10px;
+    padding-left: 5px;
+  }
+  li#showLogo a {
+    text-align: left;
+  }
+
+  .menuBar {
+    position: unset;
+    float: left;
+    width: unset;
+    padding: 30px 0;
+    height: 100vh;
+    bottom: unset;
+    margin-right: 30px;
+  }
+
+  li:hover a > i {
+    font-size: $SelectedFontSize;
+  }
+}

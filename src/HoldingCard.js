@@ -4,7 +4,6 @@ import canada from "./images/canada.png";
 import Kpi from "./Kpi.js";
 import StopLossSlider from "./StopLossSlider.js";
 import * as React from "react";
-import { isDOMComponent } from "react-dom/test-utils";
 
 const HoldingCard = (props) => {
   //debugger;
