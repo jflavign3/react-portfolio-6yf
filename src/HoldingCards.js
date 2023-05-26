@@ -1,4 +1,3 @@
-import { holdings } from "./data.js";
 import { useState } from "react";
 import { GetStaleData } from "./GetStaleData.js";
 import { GetLiveData } from "./GetLiveData.js";
@@ -8,7 +7,7 @@ let didInit = false;
 
 const HoldingCards = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [isMarketHours, setIsMarketHours] = useState(false);
+  const [isMarketHours, setIsMarketHours] = useState(true);
   const [stateHoldings, setStateHoldings] = useState([]);
 
   const RefreshData = async () => {
@@ -18,18 +17,20 @@ const HoldingCards = () => {
 
   if (!didInit) {
     didInit = true;
-    console.log(`setting did init. Holding data:${holdings.length}`);
+    console.log(`initializing. Set stale data.`);
     setStateHoldings(GetStaleData()); //set inital data without prices, so that the card render immediately. Price will come after
     //why cant do await?
 
-    setIsMarketHours(true);
     if (isMarketHours) {
+      console.log(`In market hours, refrshing data on init`);
       RefreshData();
+    } else {
+      setIsLoading(false);
     }
   }
 
   if (isLoading) {
-    console.log("still fetching stock data");
+    //console.log("still fetching stock data");
   }
   if (!isLoading) {
     console.log("finished fetching stock data");

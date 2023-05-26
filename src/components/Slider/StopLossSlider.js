@@ -2,7 +2,7 @@ import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
-import "./material.css";
+import "../../material.css";
 
 function getMarks(props) {
   const car = [
@@ -24,6 +24,7 @@ function calculateValue(value) {
 
 function StopLossSlider(props) {
   const [value, setValue] = React.useState(props.stopLossValue);
+  const [isLocked, setIsLocked] = React.useState(true);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -43,11 +44,23 @@ function StopLossSlider(props) {
       : props.currentValue;
   min = min * 0.9; //give 10% buffer
 
-  const disabled = props.isLocked;
   return (
     <Box sx={{ width: 430 }}>
+      <div
+        className="button"
+        onClick={() => {
+          setIsLocked(!isLocked);
+          console.log(`isLocked ${isLocked}`);
+        }}
+      >
+        <i
+          id="lockButton"
+          className={isLocked ? "fa fa-lock" : "fa fa-unlock"}
+        ></i>
+      </div>
+
       <Slider
-        disabled={disabled}
+        disabled={isLocked}
         value={value}
         min={min}
         step={1}

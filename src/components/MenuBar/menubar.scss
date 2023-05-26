@@ -81,7 +81,7 @@ li {
 li a {
   display: block;
   text-align: center;
-  padding: 8px;
+  padding: 5px;
   text-decoration: none;
   width: 50px;
   font-size: $SelectedTextSize;
@@ -106,7 +106,6 @@ li i {
   box-shadow: 0px -0px 3px rgba(50, 50, 50, 0.75);
   background-color: $menubarColor;
   z-index: 999;
-  padding: 10px 30px;
 }
 
 .itemActive {

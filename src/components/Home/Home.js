@@ -1,7 +1,5 @@
 //import "../../styles/menubar.scss";
 import "./Home.scss";
-import logo from "../../images/logo.gif";
-import menuData from "../MenuBar/menuData";
 import MenuBar from "../MenuBar/MenuBar";
 
 import HoldingCards from "../../HoldingCards";

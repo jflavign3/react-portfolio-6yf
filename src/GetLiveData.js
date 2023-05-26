@@ -4,13 +4,16 @@ const url = "/.netlify/functions/getStock?symbol=";
 
 export const GetLiveData = async () => {
   var updatedHoldings = [];
+  var totalHoldings = holdings.length;
+  let i = 0;
   //'for of' works with await inside, not foreach (for better way see https://gist.github.com/joeytwiddle/37d2085425c049629b80956d3c618971)
   for (const holding of holdings) {
     try {
+      i++;
+      console.log(`getting ${holding.symbol} (${i} out of ${totalHoldings})`);
       const response = await fetch(url + holding.symbol); //coudl remove await and add promises to array, then wait all
       const { price, change } = await response.json();
 
-      //console.log(`price of ${holding.symbol} = ${price}`);
       var currentdate = new Date();
       holding.lastUpdate =
         currentdate.getHours() + ":" + currentdate.getMinutes();

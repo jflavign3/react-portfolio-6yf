@@ -2,7 +2,7 @@ import loading from "./images/loading.gif";
 import usa from "./images/usa.png";
 import canada from "./images/canada.png";
 import Kpi from "./Kpi.js";
-import StopLossSlider from "./StopLossSlider.js";
+import StopLossSlider from "./components/Slider/StopLossSlider.js";
 import * as React from "react";
 
 const HoldingCard = (props) => {
@@ -20,8 +20,6 @@ const HoldingCard = (props) => {
     currency,
     lastUpdate,
   } = props.currentHolding;
-
-  const [isLocked, setIsLocked] = React.useState(true);
 
   const isLoading = props.isLoading;
   //console.log("name:" + name);
@@ -74,17 +72,7 @@ const HoldingCard = (props) => {
             currentValue={currentValue}
             currentPrice={currentPrice}
             investment={investment}
-            isLocked={isLocked}
-          ></StopLossSlider>
-          <button
-            type="button"
-            onClick={() => {
-              setIsLocked(!isLocked);
-              console.log(`isLocked ${isLocked}`);
-            }}
-          >
-            Unlock
-          </button>
+          />
         </div>
       </div>
     </article>
