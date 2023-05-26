@@ -50,7 +50,7 @@ function StopLossSlider(props) {
         className="button"
         onClick={() => {
           setIsLocked(!isLocked);
-          console.log(`isLocked ${isLocked}`);
+          //console.log(`isLocked ${isLocked}`);
         }}
       >
         <i

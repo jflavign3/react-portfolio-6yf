@@ -2,7 +2,7 @@ import { holdings } from "./data.js";
 
 const url = "/.netlify/functions/getStock?symbol=";
 
-export const GetLiveData = async () => {
+export const GetLiveData = async (props) => {
   var updatedHoldings = [];
   var totalHoldings = holdings.length;
   let i = 0;

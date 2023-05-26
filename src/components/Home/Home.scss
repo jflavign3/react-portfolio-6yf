@@ -90,6 +90,7 @@ $SelectedTextSize: 14px;
   position: fixed;
   bottom: 0;
   width: 100%;
+  z-index: 5;
 }
 
 @media only screen and (min-width: 635px) {

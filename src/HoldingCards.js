@@ -40,6 +40,7 @@ const HoldingCards = () => {
   return (
     <>
       <section className="section" id="tours">
+        <div id="notification"></div>
         <div className="section-center featured-center">
           {stateHoldings.map((currentHolding) => {
             return (
