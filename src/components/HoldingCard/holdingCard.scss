@@ -1,0 +1,110 @@
+.buttonIcon {
+  width: 15px;
+}
+
+.buttonIcon:hover {
+  cursor: pointer;
+}
+#lockButton,
+#trashButton {
+  font-size: 17px;
+}
+.holding-card {
+  transition: var(--transition);
+  background: var(--clr-grey-10);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  max-width: 500px;
+}
+.holding-card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transform: scale(1.02);
+}
+
+#dayChange {
+  font-size: 12px;
+}
+.changePositive:before {
+  content: "\2191";
+  font-family: fantasy;
+  font-weight: bold;
+  margin-right: 2px;
+}
+.changePositive {
+  color: green;
+}
+
+.changeNegative:before {
+  content: "\2193";
+  font-family: fantasy;
+  font-weight: bold;
+  margin-right: 2px;
+}
+.changeNegative {
+  color: red;
+}
+
+#loadImage {
+  width: 30px;
+  height: 30px;
+}
+.flag {
+  width: 24px;
+  height: 14px;
+  margin-right: 5px;
+}
+#flag-price {
+  display: flex;
+}
+.holding-card-row1 {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.holding-card-row2 {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-size: 0.65rem;
+  color: var(--clr-grey-5);
+  margin-bottom: 1rem;
+}
+
+.holding-card-row3 {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: var(--clr-grey-5);
+  margin-bottom: 10px;
+}
+
+.holding-card-row4 {
+  display: flex;
+  //justify-content: space-between;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: var(--clr-grey-5);
+  margin-bottom: 40px;
+}
+
+.holding-card-row5 {
+  display: block;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  line-height: 0;
+  margin-bottom: 0;
+  text-transform: capitalize;
+  color: var(--clr-primary-5);
+}
+
+.holding-title p,
+.holding-title h4 {
+  line-height: 1.25;
+}
+.holding-title p {
+  color: var(--clr-grey-7);
+}
+#ticker {
+  font-size: 0.65rem;
+}

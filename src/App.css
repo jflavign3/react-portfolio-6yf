@@ -13,41 +13,6 @@
   }
 }
 
-#dayChange {
-  font-size: 12px;
-}
-.changePositive:before {
-  content: "\2191";
-  font-family: fantasy;
-  font-weight: bold;
-  margin-right: 2px;
-}
-.changePositive {
-  color: green;
-}
-
-.changeNegative:before {
-  content: "\2193";
-  font-family: fantasy;
-  font-weight: bold;
-  margin-right: 2px;
-}
-.changeNegative {
-  color: red;
-}
-
-#loadImage {
-  width: 30px;
-  height: 30px;
-}
-.flag {
-  width: 24px;
-  height: 14px;
-  margin-right: 5px;
-}
-#flag-price {
-  display: flex;
-}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;

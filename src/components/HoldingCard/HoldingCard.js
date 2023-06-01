@@ -1,13 +1,16 @@
-import loading from "./images/loading.gif";
-import usa from "./images/usa.png";
-import canada from "./images/canada.png";
-import Kpi from "./Kpi.js";
-import StopLossSlider from "./components/Slider/StopLossSlider.js";
+import "./holdingCard.scss";
+import loading from "../../images/loading.gif";
+import usa from "../../images/usa.png";
+import canada from "../../images/canada.png";
+import Kpi from "../../Kpi.js";
+import StopLossSlider from "../Slider/StopLossSlider.js";
 import * as React from "react";
+import { FaTrashAlt } from "react-icons/fa";
 
 const HoldingCard = (props) => {
   //debugger;
   const {
+    id,
     name,
     ticker,
     currentPrice,
@@ -20,8 +23,10 @@ const HoldingCard = (props) => {
     currency,
     lastUpdate,
   } = props.currentHolding;
-
+  const deleteHolding = props.deleteHolding;
   const isLoading = props.isLoading;
+
+  const [showStopLoss, setShowStopLoss] = React.useState(true);
   //console.log("name:" + name);
   //console.log("loading:" + props.isLoading);
   return (
@@ -58,7 +63,6 @@ const HoldingCard = (props) => {
             <span>{lastUpdate}</span>
           </div>
         </div>
-
         <div className="holding-card-row3">
           <Kpi name="Investment" value={investment} symbol="$"></Kpi>
           <Kpi name="Cur. Value" value={currentValue} symbol="$"></Kpi>
@@ -67,13 +71,26 @@ const HoldingCard = (props) => {
         </div>
 
         <div className="holding-card-row4">
-          <StopLossSlider
-            stopLossValue={stopLossPrice * qty}
-            currentValue={currentValue}
-            currentPrice={currentPrice}
-            investment={investment}
-          />
+          <div
+            className="buttonIcon"
+            onClick={() => {
+              deleteHolding(id);
+            }}
+          >
+            <FaTrashAlt id="trashButton" className="buttonIcon"></FaTrashAlt>
+          </div>
         </div>
+
+        {showStopLoss && (
+          <div className="holding-card-row5">
+            <StopLossSlider
+              stopLossValue={stopLossPrice * qty}
+              currentValue={currentValue}
+              currentPrice={currentPrice}
+              investment={investment}
+            />
+          </div>
+        )}
       </div>
     </article>
   );

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { GetStaleData } from "./GetStaleData.js";
 import { GetLiveData } from "./GetLiveData.js";
-import HoldingCard from "./HoldingCard.js";
+import HoldingCard from "./components/HoldingCard/HoldingCard.js";
 
 let didInit = false;
 
@@ -10,7 +10,15 @@ const HoldingCards = () => {
   const [isMarketHours, setIsMarketHours] = useState(true);
   const [stateHoldings, setStateHoldings] = useState([]);
 
+  //to do, put in TS
+  const deleteHolding = (id) => {
+    var holdings = stateHoldings.filter((x) => x.id !== id);
+    //debugger;
+    setStateHoldings(holdings);
+  };
+
   const RefreshData = async () => {
+    //debugger;
     setStateHoldings(await GetLiveData());
     setIsLoading(false);
   };
@@ -18,6 +26,7 @@ const HoldingCards = () => {
   if (!didInit) {
     didInit = true;
     console.log(`initializing. Set stale data.`);
+    // debugger;
     setStateHoldings(GetStaleData()); //set inital data without prices, so that the card render immediately. Price will come after
     //why cant do await?
 
@@ -48,6 +57,7 @@ const HoldingCards = () => {
                 key={currentHolding.id}
                 isLoading={isLoading}
                 currentHolding={currentHolding}
+                deleteHolding={deleteHolding}
               ></HoldingCard>
             );
           })}

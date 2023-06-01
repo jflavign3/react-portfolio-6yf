@@ -3,6 +3,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import "../../material.css";
+import { FaLock, FaUnlock } from "react-icons/fa";
 
 function getMarks(props) {
   const car = [
@@ -46,19 +47,6 @@ function StopLossSlider(props) {
 
   return (
     <Box sx={{ width: 430 }}>
-      <div
-        className="button"
-        onClick={() => {
-          setIsLocked(!isLocked);
-          //console.log(`isLocked ${isLocked}`);
-        }}
-      >
-        <i
-          id="lockButton"
-          className={isLocked ? "fa fa-lock" : "fa fa-unlock"}
-        ></i>
-      </div>
-
       <Slider
         disabled={isLocked}
         value={value}
@@ -92,6 +80,21 @@ function StopLossSlider(props) {
           },
         }}
       />
+
+      <div
+        className="button"
+        onClick={() => {
+          setIsLocked(!isLocked);
+          console.log(`isLocked ${isLocked}`);
+        }}
+      >
+        {isLocked ? (
+          <FaLock id="lockButton" className="buttonIcon" />
+        ) : (
+          <FaUnlock id="lockButton" className="buttonIcon" />
+        )}
+      </div>
+
       <Typography id="non-linear-slider" gutterBottom>
         Stop loss trigger: {calculateStopLossTrigger(value, props)}
         <br />
