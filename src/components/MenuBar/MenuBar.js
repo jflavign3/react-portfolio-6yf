@@ -2,6 +2,7 @@ import "./menubar.scss";
 import menuData from "./menuData";
 import logo from "../../images/logo.gif";
 import { useState } from "react";
+import { FaTrashAlt } from "react-icons/fa";
 
 const MenuBar = () => {
   const [itemActive, setItemActive] = useState("Home");
@@ -22,7 +23,10 @@ const MenuBar = () => {
                 href="_blank"
                 className={itemActive === name ? "itemActive" : "itemDisabled"}
               >
-                <i className={image}></i>
+                <FaTrashAlt
+                  id="trashButton"
+                  className="buttonIcon"
+                ></FaTrashAlt>
                 <br />
                 {name}
               </a>

@@ -6,6 +6,7 @@ import Kpi from "../../Kpi.js";
 import StopLossSlider from "../Slider/StopLossSlider.js";
 import * as React from "react";
 import { FaTrashAlt } from "react-icons/fa";
+import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 
 const HoldingCard = (props) => {
   //debugger;
@@ -25,12 +26,18 @@ const HoldingCard = (props) => {
   } = props.currentHolding;
   const deleteHolding = props.deleteHolding;
   const isLoading = props.isLoading;
+  const expandCard = props.expandCard;
 
-  const [showStopLoss, setShowStopLoss] = React.useState(true);
+  const isExpanded = props.activeCardId === id;
+
+  //const [showStopLoss, setShowStopLoss] = React.useState(true);
   //console.log("name:" + name);
   //console.log("loading:" + props.isLoading);
   return (
-    <article className="holding-card">
+    //<div className="holding-card" className={isExpanded && "holding-card-expanded"}>
+    <div
+      className={`holding-card ${isExpanded ? "holding-card-expanded" : ""}`}
+    >
       <div className="holding-info">
         <div className="holding-card-row1">
           <h4>{name}</h4>
@@ -79,9 +86,26 @@ const HoldingCard = (props) => {
           >
             <FaTrashAlt id="trashButton" className="buttonIcon"></FaTrashAlt>
           </div>
+          <div>
+            {!isExpanded ? (
+              <AiOutlinePlus
+                className="expand-btn"
+                onClick={() => {
+                  expandCard(id);
+                }}
+              />
+            ) : (
+              <AiOutlineMinus
+                className="expand-btn"
+                onClick={() => {
+                  expandCard(null);
+                }}
+              />
+            )}
+          </div>
         </div>
 
-        {showStopLoss && (
+        {isExpanded && (
           <div className="holding-card-row5">
             <StopLossSlider
               stopLossValue={stopLossPrice * qty}
@@ -92,7 +116,7 @@ const HoldingCard = (props) => {
           </div>
         )}
       </div>
-    </article>
+    </div>
   );
 };
 export default HoldingCard;

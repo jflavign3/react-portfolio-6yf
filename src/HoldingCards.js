@@ -9,6 +9,9 @@ const HoldingCards = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isMarketHours, setIsMarketHours] = useState(true);
   const [stateHoldings, setStateHoldings] = useState([]);
+  const [activeCardId, setActiveCardId] = useState(null);
+
+  //var aa = GetLiveData();
 
   //to do, put in TS
   const deleteHolding = (id) => {
@@ -17,8 +20,13 @@ const HoldingCards = () => {
     setStateHoldings(holdings);
   };
 
+  const expandCard = (id) => {
+    setActiveCardId(id);
+  };
+
   const RefreshData = async () => {
     //debugger;
+
     setStateHoldings(await GetLiveData());
     setIsLoading(false);
   };
@@ -58,6 +66,8 @@ const HoldingCards = () => {
                 isLoading={isLoading}
                 currentHolding={currentHolding}
                 deleteHolding={deleteHolding}
+                activeCardId={activeCardId}
+                expandCard={expandCard}
               ></HoldingCard>
             );
           })}

@@ -15,7 +15,13 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
   max-width: 500px;
+  height: 160px;
 }
+
+.holding-card-expanded {
+  height: auto;
+}
+
 .holding-card:hover {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   transform: scale(1.02);
@@ -76,7 +82,7 @@
   flex-wrap: wrap;
   font-size: 0.75rem;
   color: var(--clr-grey-5);
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .holding-card-row4 {
@@ -107,4 +113,17 @@
 }
 #ticker {
   font-size: 0.65rem;
+}
+
+.expand-btn {
+  width: 1.1rem;
+  height: 1.1rem;
+  background-color: grey;
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
 }
