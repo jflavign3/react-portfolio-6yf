@@ -2,7 +2,7 @@ import "./menubar.scss";
 import menuData from "./menuData";
 import logo from "../../images/logo.gif";
 import { useState } from "react";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaHome, FaCog, FaBook } from "react-icons/fa";
 
 const MenuBar = () => {
   const [itemActive, setItemActive] = useState("Home");
@@ -23,10 +23,13 @@ const MenuBar = () => {
                 href="_blank"
                 className={itemActive === name ? "itemActive" : "itemDisabled"}
               >
-                <FaTrashAlt
-                  id="trashButton"
-                  className="buttonIcon"
-                ></FaTrashAlt>
+                {item.image == "fa fa-cog" ? (
+                  <FaCog className="buttonIcon" />
+                ) : item.image == "fa fa-chart" ? (
+                  <FaBook className="buttonIcon" />
+                ) : (
+                  <FaHome className="buttonIcon" />
+                )}{" "}
                 <br />
                 {name}
               </a>
