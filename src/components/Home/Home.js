@@ -1,7 +1,7 @@
 import "./Home.scss";
 import MenuBar from "../MenuBar/MenuBar";
 import { ToastContainer, toast } from "react-toastify";
-import HoldingCards from "../../HoldingCards";
+import HoldingCards from "../../components/HoldingCards";
 
 const Home = () => {
   return (

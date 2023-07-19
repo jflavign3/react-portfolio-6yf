@@ -8,7 +8,7 @@ function App() {
     <>
       <ErrorBoundary>
         <ToastContainer
-          autoClose={1000}
+          autoClose={2000}
           hideProgressBar={true}
           position="top-center"
         />

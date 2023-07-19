@@ -1,13 +1,13 @@
 import React from "react";
-import { holdings } from "./data.js";
+import { holdings } from "../data.js";
 import { ToastContainer, toast } from "react-toastify";
 
 const url = "/.netlify/functions/getStock?symbol=";
 
 export const GetLiveData = async (props) => {
-  /*var test = "1";
-  const toastId = React.useRef(null);
-  const notify = () =>
+  var test = "1";
+  //const toastId = React.useRef(null);
+  /*const notify = () =>
     (toastId.current = toast.success(`Hello ${test}`, { autoClose: false }));
   const update = () =>
     toast.update(toastId.current, { type: toast.TYPE.INFO, autoClose: 5000 });*/
@@ -34,22 +34,22 @@ export const GetLiveData = async (props) => {
         (holding.currentValue / holding.investment - 1) * 100
       ).toFixed(2);
 
-      //  test = 2;
-      /*  toast.success(
+      /*
+        toast.success(
         `Received ${holding.symbol} (${i} out of ${totalHoldings})`
-      );*/
+      );
+      */
+     
       // debugger;
       /* if (toastId.current == null) {
         notify();
-      }*/
-      //toastId.current = toast.success("Hello", { autoClose: false });
-      //toast.success("Hello", { autoClose: false });
-      /*   } else {
+      }
+      else {
         toast.update(toastId.current, {
           type: toast.TYPE.INFO,
           autoClose: 5000,
         });
-        //update();
+       update();
       }*/
 
       updatedHoldings.push(holding);
