@@ -2,6 +2,11 @@
   width: 15px;
 }
 
+.buttonIconLarge {
+  width: 50px;
+  color: lightslategray;
+}
+
 .buttonIcon:hover {
   cursor: pointer;
 }
@@ -16,7 +21,24 @@
   margin-bottom: 2rem;
   max-width: 500px;
   height: 160px;
+  &--addnew{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;  
+    font-size: 60px;
+  }
 }
+
+.holding-card-add {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
 
 .holding-card-expanded {
   height: auto;
@@ -103,6 +125,8 @@
   text-transform: capitalize;
   color: var(--clr-primary-5);
 }
+
+
 
 .holding-title p,
 .holding-title h4 {

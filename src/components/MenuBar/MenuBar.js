@@ -24,11 +24,11 @@ const MenuBar = () => {
                 className={itemActive === name ? "itemActive" : "itemDisabled"}
               >
                 {item.image == "fa fa-cog" ? (
-                  <FaCog className="buttonIcon" />
+                  <FaCog size={'1.5rem'} />
                 ) : item.image == "fa fa-chart" ? (
-                  <FaBook className="buttonIcon" />
+                  <FaBook size={'1.5rem'} />
                 ) : (
-                  <FaHome className="buttonIcon" />
+                  <FaHome size={'1.5rem'} />
                 )}{" "}
                 <br />
                 {name}

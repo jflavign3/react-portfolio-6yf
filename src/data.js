@@ -96,5 +96,19 @@ export const holdings = [
     qty: 30,
     currency: "USD",
     lastUpdate: "",
+  },
+  {
+    id: 8,
+    name: "IAC",
+    symbol: "IAC",
+    currentPrice: 0,
+    investment: 2967,
+    currentValue: 0,
+    dayChange: 0,
+    change: 0,
+    stopLossPrice: 97,
+    qty: 43,
+    currency: "USD",
+    lastUpdate: "",
   }
 ];

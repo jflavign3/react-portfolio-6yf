@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { GetStaleData } from "../DAL/GetStaleData.js";
+import { GetDbData } from "../DAL/GetDbData.js";
 import { GetLiveData } from "../DAL/GetLiveData.js";
 import HoldingCard from "./HoldingCard/HoldingCard.js";
+import AddHoldingCard from "./HoldingCard/AddHoldingCard.js";
 import { ToastContainer, toast } from "react-toastify";
 
 let didInit = false;
@@ -12,7 +13,6 @@ const HoldingCards = () => {
   const [stateHoldings, setStateHoldings] = useState([]);
   const [activeCardId, setActiveCardId] = useState(null);
 
-  //var aa = GetLiveData();
 
   //to do, put in TS
   const deleteHolding = (id) => {
@@ -25,13 +25,26 @@ const HoldingCards = () => {
     setActiveCardId(id);
   };
 
+/*
+  const GetHoldings = async () => {
+    //debugger;
+    //var a = await GetStaleData();
+    setStateHoldings(await GetStaleData()); 
+  }
+*/
+
   const RefreshData = async () => {
     //debugger;
-
+    let dbData = await GetDbData();
+    setStateHoldings(dbData);  //set inital data without prices, so that the card render immediately. Price will come after
+//**note that the state value in not available yet (event loop?).  Use fucntional argument to get value right away ex ()=>
+ //**note that this function is inside a condition, not supposed to use useState here..how to do it??? */ 
+ 
+ 
     toast.info(
-      `Getting market data.`
+     `Getting market data.`
     );
-    setStateHoldings(await GetLiveData());
+    setStateHoldings(await GetLiveData(dbData));
     toast.success(
       `Finished getting market data.`
     );
@@ -41,13 +54,12 @@ const HoldingCards = () => {
   if (!didInit) {
     didInit = true;
     console.log(`initializing. Set stale data.`);
-    // debugger;
-    setStateHoldings(GetStaleData()); //set inital data without prices, so that the card render immediately. Price will come after
-    //why cant do await?
+    
+ //  GetHoldings();  //set inital data without prices, so that the card render immediately. Price will come after
 
     if (isMarketHours) {
       console.log(`In market hours, refrshing data on init`);
-      RefreshData();
+      RefreshData();   //shoulnt have usestate inside a condition !!!
     } else {
       setIsLoading(false);
     }
@@ -60,6 +72,9 @@ const HoldingCards = () => {
     console.log("finished fetching stock data");
     console.log(stateHoldings);
   }
+
+    //var aa = GetLiveData();
+
 
   return (
     <>
@@ -78,6 +93,10 @@ const HoldingCards = () => {
               ></HoldingCard>
             );
           })}
+          <AddHoldingCard
+                key="-1"
+                isLoading="false"                
+          ></AddHoldingCard>
         </div>
       </section>
     </>
