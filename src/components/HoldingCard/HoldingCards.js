@@ -1,10 +1,19 @@
 import { useState } from "react";
-import { GetDbData } from "../DAL/GetDbData.js";
-import { GetLiveData } from "../DAL/GetLiveData.js";
-import HoldingCard from "./HoldingCard/HoldingCard.js";
-import AddHoldingCard from "./HoldingCard/AddHoldingCard.js";
+import { DeleteHolding, GetDbData } from "../../DAL/GetDbData.js";
+import { GetLiveData } from "../../DAL/GetLiveData.js";
+import HoldingCard from "./HoldingCard.js";
+import AddHoldingCard from "./AddHoldingCard.js";
 import { ToastContainer, toast } from "react-toastify";
 
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { FaHeadphonesAlt } from "react-icons/fa";
+
+let toDeleteId = 0;
 let didInit = false;
 
 const HoldingCards = () => {
@@ -12,38 +21,47 @@ const HoldingCards = () => {
   const [isMarketHours, setIsMarketHours] = useState(true);
   const [stateHoldings, setStateHoldings] = useState([]);
   const [activeCardId, setActiveCardId] = useState(null);
-
+  const [open, setOpen] = useState(false);
 
   //to do, put in TS
-  const deleteHolding = (id) => {
-    var holdings = stateHoldings.filter((x) => x.id !== id);
-    //debugger;
-    setStateHoldings(holdings);
+  const deleteHoldingConfirmation = async (id) => {    
+    toDeleteId = id;
+    handleOpen();       
+  };
+
+  async function deleteHoldingConfirmed() {    
+    
+    handleClose();    
+    //var holdings = stateHoldings.filter((x) => x.id !== toDeleteId);    
+    let dbData = await DeleteHolding(toDeleteId);        
+    RefreshData(true);
   };
 
   const expandCard = (id) => {
     setActiveCardId(id);
   };
 
-/*
-  const GetHoldings = async () => {
-    //debugger;
-    //var a = await GetStaleData();
-    setStateHoldings(await GetStaleData()); 
-  }
-*/
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
-  const RefreshData = async () => {
-    //debugger;
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const RefreshData = async (skipLiveRefresh) => {
     let dbData = await GetDbData();
+    debugger;
     setStateHoldings(dbData);  //set inital data without prices, so that the card render immediately. Price will come after
 //**note that the state value in not available yet (event loop?).  Use fucntional argument to get value right away ex ()=>
  //**note that this function is inside a condition, not supposed to use useState here..how to do it??? */ 
- 
- 
+     
+    if(skipLiveRefresh) return;
+
     toast.info(
      `Getting market data.`
-    );
+    );    
+
     setStateHoldings(await GetLiveData(dbData));
     toast.success(
       `Finished getting market data.`
@@ -54,12 +72,11 @@ const HoldingCards = () => {
   if (!didInit) {
     didInit = true;
     console.log(`initializing. Set stale data.`);
-    
- //  GetHoldings();  //set inital data without prices, so that the card render immediately. Price will come after
+ 
 
     if (isMarketHours) {
       console.log(`In market hours, refrshing data on init`);
-      RefreshData();   //shoulnt have usestate inside a condition !!!
+      RefreshData(false);   //shoulnt have usestate inside a condition !!!
     } else {
       setIsLoading(false);
     }
@@ -87,7 +104,7 @@ const HoldingCards = () => {
                 key={currentHolding.id}
                 isLoading={isLoading}
                 currentHolding={currentHolding}
-                deleteHolding={deleteHolding}
+                deleteHolding={deleteHoldingConfirmation}
                 activeCardId={activeCardId}
                 expandCard={expandCard}
               ></HoldingCard>
@@ -97,6 +114,30 @@ const HoldingCards = () => {
                 key="-1"
                 isLoading="false"                
           ></AddHoldingCard>
+         
+        <Dialog
+        open={open}
+        onClose={()=>setOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"     
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Are you sure you want to delete?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            The holding will be permanently lost?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>handleClose()}>Cancel</Button>          
+          <Button onClick={deleteHoldingConfirmed} autoFocus>
+            Continue
+          </Button>
+          
+        </DialogActions>
+      </Dialog>
+
         </div>
       </section>
     </>
