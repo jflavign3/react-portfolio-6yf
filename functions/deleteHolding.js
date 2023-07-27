@@ -1,14 +1,21 @@
 const {MongoClient} = require("mongodb");
 
-exports.handler = async (event, context, id) => {
+exports.handler = async (event, context) => {
   
   try {
+
+    
+  console.log('asdasdas '+ event.queryStringParameters.id);
+
+
   const mongoClient = new MongoClient(process.env.MONGODB_URI);
   const clientPromise = mongoClient.connect();
   const database = (await clientPromise).db("PORTFOLIO");
   const collection = database.collection("HOLDINGS");
   
-  const query = { id: 9 };
+  let holdingId = Number(event.queryStringParameters.id);
+  //i = 10;
+  const query = { id: holdingId };
   const result = await collection.deleteOne(query);
 
   /*

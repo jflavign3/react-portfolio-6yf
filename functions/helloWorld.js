@@ -5,6 +5,8 @@ exports.handler = async (event, context) => {
   const fetch = (...args) =>
     import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
+debugger;
+console.log('aaaa');
   const url = `https://icanhazdadjoke.com/`;
   try {
     const pageStream = await fetch(url, {

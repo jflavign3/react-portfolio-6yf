@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { DeleteHolding, GetDbData } from "../../DAL/GetDbData.js";
+import { UpsertHolding, DeleteHolding, GetDbData } from "../../DAL/GetDbData.js";
 import { GetLiveData } from "../../DAL/GetLiveData.js";
 import HoldingCard from "./HoldingCard.js";
 import AddHoldingCard from "./AddHoldingCard.js";
@@ -28,7 +28,12 @@ const HoldingCards = () => {
     toDeleteId = id;
     handleOpen();       
   };
-
+/*
+  const updateHolding = async (holding) => {
+    //debugger;
+    let result = await UpsertHolding(holding);    
+  }
+*/
   async function deleteHoldingConfirmed() {    
     
     handleClose();    
@@ -41,6 +46,31 @@ const HoldingCards = () => {
     setActiveCardId(id);
   };
 
+  const inMarketHours = () =>{    
+
+    /*
+    var offset = new Date().getTimezoneOffset();// getting offset to make time in gmt+0 zone (UTC) (for gmt+5 offset comes as -300 minutes)
+var date = new Date();
+date.setMinutes ( date.getMinutes() + offset);// date now in UTC time
+            
+var easternTimeOffset = -240; //for dayLight saving, Eastern time become 4 hours behind UTC thats why its offset is -4x60 = -240 minutes. So when Day light is not active the offset will be -300
+date.setMinutes ( date.getMinutes() + easternTimeOffset);*/
+
+    var today = new Date();    
+    if (today.getHours >= 17 || today.getHours < 9){
+      return false;
+    }
+
+    if (today.getHours === 9){
+      return today.getMinutes >= 30; 
+    }
+
+    if (today.getHours === 16){
+      return today.getMinutes < 30; 
+    }
+          
+  }
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -50,34 +80,42 @@ const HoldingCards = () => {
   };
 
   const RefreshData = async (skipLiveRefresh) => {
+    
     let dbData = await GetDbData();
-    debugger;
+  
     setStateHoldings(dbData);  //set inital data without prices, so that the card render immediately. Price will come after
 //**note that the state value in not available yet (event loop?).  Use fucntional argument to get value right away ex ()=>
- //**note that this function is inside a condition, not supposed to use useState here..how to do it??? */ 
-     
+      
     if(skipLiveRefresh) return;
 
     toast.info(
      `Getting market data.`
     );    
 
-    setStateHoldings(await GetLiveData(dbData));
+    let liveData = await GetLiveData(dbData); //get new data, update array and database
+   
+    setStateHoldings(liveData); //refresh the array of holdings
+
     toast.success(
       `Finished getting market data.`
     );
     setIsLoading(false);
   };
 
+  
   if (!didInit) {
     didInit = true;
-    console.log(`initializing. Set stale data.`);
- 
+    console.log(`initializing. Set stale data.`); 
 
-    if (isMarketHours) {
-      console.log(`In market hours, refrshing data on init`);
-      RefreshData(false);   //shoulnt have usestate inside a condition !!!
+    if (inMarketHours()) {
+      console.log(`In market hours, refreshing data on init`);
+      RefreshData(false);   //shoulnt have usestate inside a condition !!! but here we go
     } else {
+      
+      toast.info(
+        `Markets are closed`
+      );
+      RefreshData(true);
       setIsLoading(false);
     }
   }
@@ -89,9 +127,6 @@ const HoldingCards = () => {
     console.log("finished fetching stock data");
     console.log(stateHoldings);
   }
-
-    //var aa = GetLiveData();
-
 
   return (
     <>

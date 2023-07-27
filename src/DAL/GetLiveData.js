@@ -4,6 +4,34 @@ import { ToastContainer, toast } from "react-toastify";
 
 const url = "/.netlify/functions/getStock?symbol=";
 
+
+
+
+
+const UpsertHolding = async (holding) => {
+    
+  const url = `/.netlify/functions/UpsertHolding`;  
+
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify(holding)
+  });
+  //debugger;
+
+  // Awaiting response.json()
+  const result = await response.json();
+  console.log(`update status of ${holding.name}. modified:${result.modifiedCount}`)
+  toast.success(
+    `Updated ${holding.name}`
+   );
+
+  return result;
+};
+
+
 export const GetLiveData = async (props) => {
   
   //const toastId = React.useRef(null);
@@ -54,6 +82,7 @@ export const GetLiveData = async (props) => {
       }*/
 
       updatedHoldings.push(holding);
+      UpsertHolding(holding);
 
       // console.log(stateHoldings);
     } catch (error) {
