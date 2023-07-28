@@ -1,8 +1,7 @@
-import { holdings } from "../data.js";
-import { ToastContainer, toast } from "react-toastify";
+
+import { toast } from "react-toastify";
 
 //dialog box   https://mui.com/material-ui/react-dialog/
-import * as React from 'react';
 
 
 export const GetDbData = async () => {

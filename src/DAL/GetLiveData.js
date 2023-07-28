@@ -1,6 +1,5 @@
-import React from "react";
 import { holdings } from "../data.js";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const url = "/.netlify/functions/getStock?symbol=";
 

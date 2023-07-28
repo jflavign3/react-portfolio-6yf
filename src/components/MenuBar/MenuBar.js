@@ -5,7 +5,7 @@ import { useState } from "react";
 import { FaHome, FaCog, FaBook } from "react-icons/fa";
 
 const MenuBar = () => {
-  const [itemActive, setItemActive] = useState("Home");
+  const [itemActive] = useState("Home");
 
   return (
     <div className="menuBar">
@@ -16,16 +16,16 @@ const MenuBar = () => {
           </a>
         </li>
         {menuData.map((item) => {
-          const { name, image } = item;
+          const { name } = item;
           return (
             <li key={name} className="">
               <a
                 href="_blank"
                 className={itemActive === name ? "itemActive" : "itemDisabled"}
               >
-                {item.image == "fa fa-cog" ? (
+                {item.image === "fa fa-cog" ? (
                   <FaCog size={'1.5rem'} />
-                ) : item.image == "fa fa-chart" ? (
+                ) : item.image === "fa fa-chart" ? (
                   <FaBook size={'1.5rem'} />
                 ) : (
                   <FaHome size={'1.5rem'} />

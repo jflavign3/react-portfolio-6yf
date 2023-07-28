@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { UpsertHolding, DeleteHolding, GetDbData } from "../../DAL/GetDbData.js";
+import {  DeleteHolding, GetDbData } from "../../DAL/GetDbData.js";
 import { GetLiveData } from "../../DAL/GetLiveData.js";
 import HoldingCard from "./HoldingCard.js";
 import AddHoldingCard from "./AddHoldingCard.js";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -11,14 +11,12 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { FaHeadphonesAlt } from "react-icons/fa";
 
 let toDeleteId = 0;
 let didInit = false;
 
 const HoldingCards = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [isMarketHours, setIsMarketHours] = useState(true);
   const [stateHoldings, setStateHoldings] = useState([]);
   const [activeCardId, setActiveCardId] = useState(null);
   const [open, setOpen] = useState(false);
@@ -38,7 +36,7 @@ const HoldingCards = () => {
     
     handleClose();    
     //var holdings = stateHoldings.filter((x) => x.id !== toDeleteId);    
-    let dbData = await DeleteHolding(toDeleteId);        
+    await DeleteHolding(toDeleteId);        
     RefreshData(true);
   };
 

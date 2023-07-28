@@ -1,7 +1,7 @@
 import "./App.css";
 import ErrorBoundary from "./ErrorBoundary";
 import Home from "./components/Home/Home";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
