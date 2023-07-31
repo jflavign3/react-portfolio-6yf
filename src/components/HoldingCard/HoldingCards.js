@@ -45,6 +45,7 @@ const HoldingCards = () => {
   };
 
   const inMarketHours = () =>{    
+  //  debugger;
 
     /*
     var offset = new Date().getTimezoneOffset();// getting offset to make time in gmt+0 zone (UTC) (for gmt+5 offset comes as -300 minutes)
@@ -55,18 +56,21 @@ var easternTimeOffset = -240; //for dayLight saving, Eastern time become 4 hours
 date.setMinutes ( date.getMinutes() + easternTimeOffset);*/
 
     var today = new Date();    
-    if (today.getHours >= 17 || today.getHours < 9){
+    var hour = today.getHours;
+    
+    if (hour >= 17 || hour < 9){
       return false;
     }
 
-    if (today.getHours === 9){
+    if (hour === 9){
       return today.getMinutes >= 30; 
     }
 
-    if (today.getHours === 16){
+    if (hour === 16){
       return today.getMinutes < 30; 
     }
           
+    return true;
   }
 
   const handleOpen = () => {
