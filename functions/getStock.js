@@ -4,7 +4,7 @@ exports.handler = async (event, context) => {
   const fetch = (...args) =>
     import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
-  const symbol = event.queryStringParameters.symbol;
+  const symbol = event.queryStringParameters.symbol.toUpperCase();
   //console.log(`symbole:${symbol}`);
   //const url = `https://www.google.com/finance/quote/${symbol}`;
   const url = `https://finance.yahoo.com/quote/${symbol}`;
@@ -18,6 +18,8 @@ exports.handler = async (event, context) => {
     const pageStream = await fetch(url);
     const body = await pageStream.text();
     var lookupStartString = body.indexOf(`data-symbol="${symbol}"`); //where to start the document
+    console.log(`start:${lookupStartString}  data-symbol="${symbol}"`);
+    console.log(body.substring(lookupStartString, lookupStartString + 50));
     //console.log(`index:${lookupStartString}`);
     var startPos = body.indexOf("value=", lookupStartString) + 7;
     //console.log(`startPos:${startPos}`);

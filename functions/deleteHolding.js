@@ -5,9 +5,6 @@ exports.handler = async (event, context) => {
   try {
 
     
-  console.log('asdasdas '+ event.queryStringParameters.id);
-
-
   const mongoClient = new MongoClient(process.env.MONGODB_URI);
   const clientPromise = mongoClient.connect();
   const database = (await clientPromise).db("PORTFOLIO");
