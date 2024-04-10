@@ -2,10 +2,16 @@ import "./menubar.scss";
 import menuData from "./menuData";
 import logo from "../../images/logo.gif";
 import { useState } from "react";
-import { FaHome, FaCog, FaBook } from "react-icons/fa";
+import { FaCog, FaBook } from "react-icons/fa";
+import { MdDashboard } from "react-icons/md";
 
-const MenuBar = () => {
-  const [itemActive] = useState("Home");
+const MenuBar = ({ setCurrentPage }) => {
+  const [itemActive, setItemActive] = useState("Overview");
+
+  const menuClicked = (item) => {
+    setItemActive(item.name);
+    setCurrentPage(item);
+  };
 
   return (
     <div className="menuBar">
@@ -18,17 +24,16 @@ const MenuBar = () => {
         {menuData.map((item) => {
           const { name } = item;
           return (
-            <li key={name} className="">
+            <li key={name} onClick={() => menuClicked(item)} className="">
               <a
-                href="_blank"
                 className={itemActive === name ? "itemActive" : "itemDisabled"}
               >
                 {item.image === "fa fa-cog" ? (
-                  <FaCog size={'1.5rem'} />
+                  <FaCog size={"1.5rem"} />
                 ) : item.image === "fa fa-chart" ? (
-                  <FaBook size={'1.5rem'} />
+                  <FaBook size={"1.5rem"} />
                 ) : (
-                  <FaHome size={'1.5rem'} />
+                  <MdDashboard size={"1.5rem"} />
                 )}{" "}
                 <br />
                 {name}

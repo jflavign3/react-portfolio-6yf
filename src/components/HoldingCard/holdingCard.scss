@@ -2,6 +2,9 @@
   width: 15px;
 }
 
+.refreshButton {
+  padding-top: 3rem;
+}
 .buttonIconLarge {
   width: 50px;
   color: lightslategray;
@@ -21,11 +24,11 @@
   margin-bottom: 2rem;
   max-width: 500px;
   height: 160px;
-  &--addnew{
+  &--addnew {
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: center;  
+    justify-content: center;
     font-size: 60px;
   }
 }
@@ -36,9 +39,6 @@
   align-items: center;
   justify-content: center;
 }
-
-
-
 
 .holding-card-expanded {
   height: auto;
@@ -125,8 +125,6 @@
   text-transform: capitalize;
   color: var(--clr-primary-5);
 }
-
-
 
 .holding-title p,
 .holding-title h4 {

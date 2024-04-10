@@ -1,9 +1,9 @@
 const menuItems = [
   {
-    name: "Home",
-    title: "Dashboard",
+    name: "Overview",
+    title: "Overview",
     default: true,
-    image: "fa fa-home",
+    image: "md MdDashboard",
     webOnly: false,
     showName: true,
   },

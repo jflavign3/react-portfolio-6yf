@@ -1,4 +1,3 @@
-import { holdings } from "../data.js";
 import { toast } from "react-toastify";
 
 const url = "/.netlify/functions/getStock?symbol=";

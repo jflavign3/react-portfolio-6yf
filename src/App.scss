@@ -92,24 +92,60 @@ $SelectedTextSize: 14px;
   width: 100%;
   z-index: 5;
 }
+.App {
+  text-align: center;
+}
 
-@media only screen and (min-width: 635px) {
-  .topBarVisibleForSmallScreen,
-  #bottomMenuForSmallScreen {
-    display: none;
-  }
-  .leftMenuForBigScreen {
-    display: block;
-  }
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
 
-  #setupPage {
-    height: calc(100% - 70px);
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
   }
+}
 
-  .titleDesktop {
-    font-family: sfFont;
-    font-size: 20px;
-    margin: 20px 20px 10px 20px;
-    display: block;
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.topBarVisibleForSmallScreen,
+#bottomMenuForSmallScreen {
+  display: none;
+}
+.leftMenuForBigScreen {
+  display: block;
+}
+
+#setupPage {
+  height: calc(100% - 70px);
+}
+
+.titleDesktop {
+  font-family: sfFont;
+  font-size: 20px;
+  margin: 20px 20px 10px 20px;
+  display: block;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
