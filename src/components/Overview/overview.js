@@ -3,24 +3,61 @@ import "./overview.scss";
 import { Chart } from "react-google-charts";
 import { GetDbData } from "../../DAL/GetDbData";
 import { useState, useEffect } from "react";
-import { MdOutlineFormatAlignJustify } from "react-icons/md";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import HoldingGrid from "../HoldingGrid/HoldingGrid";
 
 export const options = {
-  title: "My Daily Activities",
+  title: "Overview",
   is3D: true,
+};
+
+export const PieStyleEnum = {
+  ByHoldingType: 0,
+  StocksOnly: 1,
+};
+
+// prettier-ignore
+const HoldingTypeEnum = {
+  "stock": 1,
+  "CPG": 2,
+  "world": 3,
+  "emerging": 4,
 };
 
 const Overview = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [gridData, setGridData] = useState([]);
   const [pieData, setPieData] = useState([]);
+  const [pieStyle, setPieStyle] = useState(0);
+  const [HoldingType, setHoldingType] = useState({ stock: 2 });
+  const [pieSelection, setPieSelection] = useState(0);
 
   //
+  const GetHoldingByType = async (type) => {
+    var db = await GetDbData();
+    //debugger;
+    const HoldingType_ = JSON.parse(JSON.stringify(HoldingTypeEnum));
+
+    // Accessing the value of 'CPG'
+    console.log(HoldingType_[type[0]]);
+    const res = db.reduce((accumulator, currentValue) => {
+      if (currentValue.typeId === HoldingType_[type[0]]) {
+        accumulator.push(currentValue);
+      }
+      return accumulator;
+    }, []);
+
+    console.log(`build grid data for type {typeId}`);
+
+    setGridData(res);
+  };
+
   const ConvertRawDataToHarmonizedCPG = (data) => {
     var grandTotal = 0;
     var CPGtotal = 0;
     const res = data.reduce((accumulator, currentValue) => {
-      if (currentValue.isCPG === true) {
-        //  debugger;
+      if (currentValue.typeId === 2) {
         CPGtotal += Number(currentValue.currentValue);
       } else {
         accumulator.push(currentValue);
@@ -36,10 +73,34 @@ const Overview = () => {
     return res;
   };
 
+  const chartEvents = [
+    {
+      eventName: "select",
+      callback({ chartWrapper }) {
+        //debugger;
+        var selection = chartWrapper.getChart().getSelection();
+        if (selection.length > 0) {
+          var item = selection[0];
+          if (item.row != null) {
+            //debugger;
+            setPieSelection(pieData[item.row + 1]);
+            var selectedRow = pieData[item.row + 1];
+            console.log("pie clicked - Selected value: " + selectedRow);
+            //debugger;
+            if (pieStyle === PieStyleEnum.ByHoldingType) {
+              setHoldingType(selectedRow);
+            }
+          }
+        }
+      },
+    },
+  ];
+
   const ConvertRawDataToHarmonizedWorldIndex = (data) => {
     var total = 0;
+    // debugger;
     const res = data.reduce((accumulator, currentValue) => {
-      if (currentValue.isWorldIndexETF === true) {
+      if (currentValue.typeId === 3) {
         //  debugger;
         total += Number(currentValue.currentValue);
       } else {
@@ -54,17 +115,73 @@ const Overview = () => {
     return res;
   };
 
+  const ConvertRawDataToHarmonizedEmergingMarkets = (data) => {
+    var total = 0;
+    const res = data.reduce((accumulator, currentValue) => {
+      if (currentValue.typeId === 4) {
+        //  debugger;
+        total += Number(currentValue.currentValue);
+      } else {
+        accumulator.push(currentValue);
+      }
+
+      return accumulator;
+    }, []);
+
+    res.push({ name: "Emerging Markets", currentValue: total });
+
+    return res;
+  };
+
+  const ConvertRawDataToHarmonizedStocks = (data) => {
+    var total = 0;
+    const res = data.reduce((accumulator, currentValue) => {
+      if (currentValue.typeId === 1) {
+        //  debugger;
+        total += Number(currentValue.currentValue);
+      } else {
+        accumulator.push(currentValue);
+      }
+
+      return accumulator;
+    }, []);
+
+    res.push({ name: "Stocks", currentValue: total });
+
+    return res;
+  };
+
+  const ConvertRawDataToStocksOnly = (data) => {
+    var total = 0;
+    const res = data.reduce((accumulator, currentValue) => {
+      if (currentValue.typeId === 1) {
+        accumulator.push(currentValue);
+      }
+
+      return accumulator;
+    }, []);
+
+    res.push({ name: "Stocks", currentValue: total });
+
+    return res;
+  };
+
   const SetPieChartData = async () => {
     setIsLoading(true);
 
     console.log(`Getting pie chart data`);
-    //to do : set in cache for cards to use
 
-    debugger;
     let data = await GetDbData();
+    setGridData(data); //to send to holdingGrid
 
-    data = ConvertRawDataToHarmonizedCPG(data);
-    data = ConvertRawDataToHarmonizedWorldIndex(data);
+    if (pieStyle === PieStyleEnum.StocksOnly) {
+      data = ConvertRawDataToStocksOnly(data);
+    } else {
+      data = ConvertRawDataToHarmonizedCPG(data);
+      data = ConvertRawDataToHarmonizedWorldIndex(data);
+      data = ConvertRawDataToHarmonizedEmergingMarkets(data);
+      data = ConvertRawDataToHarmonizedStocks(data);
+    }
 
     let total = 0;
     var totalAssets = data.reduce((accumulator, currentValue) => {
@@ -91,32 +208,63 @@ const Overview = () => {
       if (i === 0) {
         accumulator.push(header);
       }
-      //debugger;
       // Push the modified object into the accumulator array
       accumulator.push(modifiedObject);
       i++;
       return accumulator;
     }, []); // Start with an empty array as the accumulator
+    //debugger;
 
+    console.log(`Setting pie chart data:${JSON.stringify(pieArray)}`);
     setPieData(pieArray);
     setIsLoading(false);
-
-    // debugger;
   };
 
   useEffect(() => {
+    if (HoldingType != -1) {
+      console.log("Useeffect - holdingType changed - changeGridData");
+      setGridData([]);
+
+      GetHoldingByType(HoldingType);
+    }
+  }, [HoldingType]);
+
+  useEffect(() => {
+    console.log("Useeffect - setPieChart");
     SetPieChartData();
-  }, []);
+    setGridData([]);
+  }, [pieStyle]);
 
   return (
     <div className="overview">
-      <Chart
-        chartType="PieChart"
-        data={pieData}
-        options={options}
-        width={"100%"}
-        height={"400px"}
-      />
+      <div>
+        <ButtonGroup variant="contained" aria-label="Basic button group">
+          <Button onClick={() => setPieStyle(PieStyleEnum.ByType)}>
+            By Type
+          </Button>
+          <Button onClick={() => setPieStyle(PieStyleEnum.StocksOnly)}>
+            Stocks Only
+          </Button>
+          <Button>Three</Button>
+        </ButtonGroup>
+      </div>
+      <div>
+        <Chart
+          chartType="PieChart"
+          data={pieData}
+          options={options}
+          chartEvents={chartEvents}
+          width={"100%"}
+          height={"400px"}
+        />
+      </div>
+      {gridData.length > 0 && (
+        <HoldingGrid
+          // pieStyle={pieStyle}
+          // pieSelection={pieSelection}
+          data={gridData}
+        ></HoldingGrid>
+      )}
     </div>
   );
 };

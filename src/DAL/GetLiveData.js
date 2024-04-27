@@ -41,8 +41,9 @@ export const GetLiveData = async (props) => {
       i++;
       console.log(`getting ${holding.symbol} (${i} out of ${totalHoldings})`);
       const response = await fetch(url + holding.symbol); //coudl remove await and add promises to array, then wait all
+      //debugger;
       const { price, change } = await response.json();
-      console.log(`received ${holding.symbol} ${price}`);
+      console.log(`....received ${holding.symbol} ${price}`);
       var currentdate = new Date();
       holding.lastUpdate =
         currentdate.getHours() + ":" + currentdate.getMinutes();

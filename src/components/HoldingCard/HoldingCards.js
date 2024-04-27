@@ -82,6 +82,7 @@ date.setMinutes ( date.getMinutes() + easternTimeOffset);*/
     var total = 0;
     const res = data.reduce((accumulator, currentValue) => {
       if (currentValue.stopLossPrice > 0) {
+        //debugger;
         accumulator.push(currentValue);
       }
 
@@ -93,7 +94,7 @@ date.setMinutes ( date.getMinutes() + easternTimeOffset);*/
 
   const ConvertRawDataToRemoveCPG = (data) => {
     const res = data.reduce((accumulator, currentValue) => {
-      if (currentValue.isCPG !== true) {
+      if (currentValue.typeId !== 2) {
         accumulator.push(currentValue);
       }
 
@@ -103,13 +104,14 @@ date.setMinutes ( date.getMinutes() + easternTimeOffset);*/
     return res;
   };
 
-  const RefreshData = async (skipLiveRefresh) => {
+  const RefreshData = async (skipLiveRefresh, forceRefresh) => {
     let dbData = await GetDbData();
-
-    setStateHoldings(dbData); //set inital data without prices, so that the card render immediately. Price will come after
+    dbData = ConvertRawDataToRemoveCPG(dbData);
+    let stopLosses = ConvertRawDataToStopLossOnly(dbData);
+    setStateHoldings(stopLosses); //set inital data without prices, so that the card render immediately. Price will come after
     //**note that the state value in not available yet (event loop?).  Use fucntional argument to get value right away ex ()=>
 
-    if (!inMarketHours()) {
+    if (!inMarketHours() && !forceRefresh) {
       toast.info(`Markets are closed`);
       skipLiveRefresh = true;
     }
@@ -118,8 +120,6 @@ date.setMinutes ( date.getMinutes() + easternTimeOffset);*/
     setIsLoading(true);
 
     toast.info(`Getting market data.`);
-
-    dbData = ConvertRawDataToRemoveCPG(dbData);
 
     let liveData = await GetLiveData(dbData); //get new data, update array and database
 
@@ -148,7 +148,7 @@ date.setMinutes ( date.getMinutes() + easternTimeOffset);*/
     <>
       {" "}
       <div className="refreshButton">
-        <Button variant="outlined" onClick={() => RefreshData(false)}>
+        <Button variant="outlined" onClick={() => RefreshData(false, true)}>
           Refresh
         </Button>
       </div>

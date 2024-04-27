@@ -7,7 +7,7 @@ exports.handler = async (event, context) => {
   const symbol = event.queryStringParameters.symbol.toUpperCase();
   //console.log(`symbole:${symbol}`);
   //const url = `https://www.google.com/finance/quote/${symbol}`;
-  const url = `https://finance.yahoo.com/quote/${symbol}`;
+  const url = `https://ca.finance.yahoo.com/quote/${symbol}`;
 
   const stock = {
     price: 0,

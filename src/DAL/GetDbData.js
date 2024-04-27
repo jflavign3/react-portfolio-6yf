@@ -5,18 +5,18 @@ import { toast } from "react-toastify";
 export const GetDbData = async () => {
   const getHoldings_url = "/.netlify/functions/getHoldings";
 
-  debugger;
-  var result = await fetch(getHoldings_url).then((response) => response.json());
-  /*
+  var result;
+
   if (
     sessionStorage["data"] === null ||
     typeof sessionStorage["data"] === "undefined"
   ) {
     result = await fetch(getHoldings_url).then((response) => response.json());
+    sessionStorage["data"] = JSON.stringify(result);
   } else {
     result = JSON.parse(sessionStorage["data"]);
   }
-*/
+
   return result;
 };
 
