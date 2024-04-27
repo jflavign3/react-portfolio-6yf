@@ -19,10 +19,10 @@ export const PieStyleEnum = {
 
 // prettier-ignore
 const HoldingTypeEnum = {
-  "stock": 1,
+  "Stocks": 1,
   "CPG": 2,
-  "world": 3,
-  "emerging": 4,
+  "World indexes": 3,
+  "Emerging Markets": 4,
 };
 
 const Overview = () => {
@@ -36,7 +36,7 @@ const Overview = () => {
   //
   const GetHoldingByType = async (type) => {
     var db = await GetDbData();
-    //debugger;
+
     const HoldingType_ = JSON.parse(JSON.stringify(HoldingTypeEnum));
 
     // Accessing the value of 'CPG'
