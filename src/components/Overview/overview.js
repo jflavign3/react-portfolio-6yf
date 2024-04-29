@@ -10,6 +10,7 @@ import HoldingGrid from "../HoldingGrid/HoldingGrid";
 export const options = {
   title: "Overview",
   is3D: true,
+  chartArea: { width: 600, height: 500 },
 };
 
 export const PieStyleEnum = {
@@ -77,12 +78,12 @@ const Overview = () => {
     {
       eventName: "select",
       callback({ chartWrapper }) {
-        //debugger;
+        debugger;
         var selection = chartWrapper.getChart().getSelection();
         if (selection.length > 0) {
           var item = selection[0];
           if (item.row != null) {
-            //debugger;
+            //  debugger;
             setPieSelection(pieData[item.row + 1]);
             var selectedRow = pieData[item.row + 1];
             console.log("pie clicked - Selected value: " + selectedRow);
@@ -170,7 +171,7 @@ const Overview = () => {
     setIsLoading(true);
 
     console.log(`Getting pie chart data`);
-
+    debugger;
     let data = await GetDbData();
     setGridData(data); //to send to holdingGrid
 
@@ -255,7 +256,7 @@ const Overview = () => {
           options={options}
           chartEvents={chartEvents}
           width={"100%"}
-          height={"400px"}
+          height={"900px"}
         />
       </div>
       {gridData.length > 0 && (
