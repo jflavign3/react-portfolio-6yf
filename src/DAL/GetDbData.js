@@ -11,9 +11,11 @@ export const GetDbData = async () => {
     sessionStorage["data"] === null ||
     typeof sessionStorage["data"] === "undefined"
   ) {
+    console.log("Storage empty. Getting data from db");
     result = await fetch(getHoldings_url).then((response) => response.json());
     sessionStorage["data"] = JSON.stringify(result);
   } else {
+    console.log("Storage full. Getting data from storage");
     result = JSON.parse(sessionStorage["data"]);
   }
 

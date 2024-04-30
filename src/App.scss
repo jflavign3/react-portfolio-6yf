@@ -122,16 +122,19 @@ $SelectedTextSize: 14px;
   color: #61dafb;
 }
 
-.topBarVisibleForSmallScreen,
-#bottomMenuForSmallScreen {
-  display: none;
-}
-.leftMenuForBigScreen {
-  display: block;
-}
+@media screen and (min-width: 992px) {
+  .topBarVisibleForSmallScreen,
+  #bottomMenuForSmallScreen {
+    display: none;
+  }
 
-#setupPage {
-  height: calc(100% - 70px);
+  .leftMenuForBigScreen {
+    display: block;
+  }
+
+  #setupPage {
+    height: calc(100% - 70px);
+  }
 }
 
 .titleDesktop {

@@ -67,7 +67,7 @@ const HoldingGrid = ({ data }) => {
       <Chart
         chartType="Table"
         width="100%"
-        height="400px"
+        //height="400px"
         data={gridData}
         options={options}
         formatters={formatters}

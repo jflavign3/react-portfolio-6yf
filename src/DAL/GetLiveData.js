@@ -42,8 +42,15 @@ export const GetLiveData = async (props) => {
       console.log(`getting ${holding.symbol} (${i} out of ${totalHoldings})`);
       const response = await fetch(url + holding.symbol); //coudl remove await and add promises to array, then wait all
       //debugger;
-      const { price, change } = await response.json();
+      var { price, change } = await response.json();
+      price = price.replace(/"/g, "");
       console.log(`....received ${holding.symbol} ${price}`);
+
+      if (isNaN(price)) {
+        console.log(`Error, not a number`);
+        toast.error("Error reading number");
+        break;
+      }
       var currentdate = new Date();
       holding.lastUpdate =
         currentdate.getHours() + ":" + currentdate.getMinutes();
@@ -53,24 +60,6 @@ export const GetLiveData = async (props) => {
       holding.change = Number(
         (holding.currentValue / holding.investment - 1) * 100
       ).toFixed(2);
-
-      /*
-        toast.success(
-        `Received ${holding.symbol} (${i} out of ${totalHoldings})`
-      );
-      */
-
-      // debugger;
-      /* if (toastId.current == null) {
-        notify();
-      }
-      else {
-        toast.update(toastId.current, {
-          type: toast.TYPE.INFO,
-          autoClose: 5000,
-        });
-       update();
-      }*/
 
       updatedHoldings.push(holding);
       UpsertHolding(holding);

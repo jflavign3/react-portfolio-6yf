@@ -8,9 +8,9 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import HoldingGrid from "../HoldingGrid/HoldingGrid";
 
 export const options = {
-  title: "Overview",
   is3D: true,
-  chartArea: { width: 600, height: 500 },
+  chartArea: { width: 600, height: "80%", bottom: 10 },
+  legend: { position: "top", alignment: "start" },
 };
 
 export const PieStyleEnum = {
@@ -78,7 +78,7 @@ const Overview = () => {
     {
       eventName: "select",
       callback({ chartWrapper }) {
-        debugger;
+        //debugger;
         var selection = chartWrapper.getChart().getSelection();
         if (selection.length > 0) {
           var item = selection[0];
@@ -171,7 +171,7 @@ const Overview = () => {
     setIsLoading(true);
 
     console.log(`Getting pie chart data`);
-    debugger;
+    //debugger;
     let data = await GetDbData();
     setGridData(data); //to send to holdingGrid
 
@@ -235,6 +235,10 @@ const Overview = () => {
     SetPieChartData();
     setGridData([]);
   }, [pieStyle]);
+
+  useEffect(() => {
+    setGridData([]);
+  }, [pieData]);
 
   return (
     <div className="overview">
