@@ -9,8 +9,8 @@ import HoldingGrid from "../HoldingGrid/HoldingGrid";
 
 export const options = {
   is3D: true,
-  chartArea: { width: 600, height: "80%", bottom: 10 },
-  legend: { position: "top", alignment: "start" },
+  chartArea: { width: 500, height: "80%", bottom: 10 },
+  legend: { position: "right", alignment: "center" },
 };
 
 export const PieStyleEnum = {
@@ -253,14 +253,14 @@ const Overview = () => {
           <Button>Three</Button>
         </ButtonGroup>
       </div>
-      <div>
+      <div id="pieWrapper">
         <Chart
           chartType="PieChart"
           data={pieData}
           options={options}
           chartEvents={chartEvents}
           width={"100%"}
-          height={"900px"}
+          height={"300px"}
         />
       </div>
       {gridData.length > 0 && (
