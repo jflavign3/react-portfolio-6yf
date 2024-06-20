@@ -37,7 +37,10 @@ $SelectedTextSize: 14px;
   display: flex;
   flex-direction: column;
   height: 100%;
+  max-width: 400px;
+  width: 80%;
   justify-content: space-between;
+  margin-left: 50px;
 }
 
 #floatMenu {
@@ -45,6 +48,10 @@ $SelectedTextSize: 14px;
   top: 2px;
   background-color: #f7f7f7;
   position: absolute;
+}
+
+.overviewPage {
+  display: flex;
 }
 
 .title {
@@ -98,16 +105,17 @@ $SelectedTextSize: 14px;
   color: #61dafb;
 }
 
-@media screen and (max-width: 991px) {
+@media screen and (max-width: 664px) {
   .leftMenuForBigScreen {
     display: none;
   }
+
   #bottomMenuForSmallScreen {
     overflow: hidden;
     position: fixed;
     bottom: 0;
+    z-index: 6;
     width: 100%;
-    z-index: 5;
   }
   .topBarVisibleForSmallScreen {
     display: flex;
@@ -119,7 +127,7 @@ $SelectedTextSize: 14px;
   }
 }
 
-@media screen and (min-width: 992px) {
+@media screen and (min-width: 665px) {
   .topBarVisibleForSmallScreen,
   #bottomMenuForSmallScreen {
     display: none;

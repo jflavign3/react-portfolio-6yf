@@ -2,12 +2,13 @@ import { toast } from "react-toastify";
 
 //dialog box   https://mui.com/material-ui/react-dialog/
 
-export const GetDbData = async () => {
+export const GetDbData = async (forceRefresh) => {
   const getHoldings_url = "/.netlify/functions/getHoldings";
 
   var result;
 
   if (
+    forceRefresh ||
     sessionStorage["data"] === null ||
     typeof sessionStorage["data"] === "undefined"
   ) {

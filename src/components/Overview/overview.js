@@ -2,7 +2,7 @@ import * as React from "react";
 import "./overview.scss";
 import { Chart } from "react-google-charts";
 import { GetDbData } from "../../DAL/GetDbData";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import HoldingGrid from "../HoldingGrid/HoldingGrid";
@@ -34,22 +34,18 @@ const Overview = () => {
   const [HoldingType, setHoldingType] = useState({ stock: 2 });
   const [pieSelection, setPieSelection] = useState(0);
 
-  //
+  const pieDataRef = useRef(pieData); //useref to have value on first load, by the callback click
+
   const GetHoldingByType = async (type) => {
     var db = await GetDbData();
-
     const HoldingType_ = JSON.parse(JSON.stringify(HoldingTypeEnum));
 
-    // Accessing the value of 'CPG'
-    console.log(HoldingType_[type[0]]);
     const res = db.reduce((accumulator, currentValue) => {
-      if (currentValue.typeId === HoldingType_[type[0]]) {
+      if (currentValue.typeId === HoldingType_[type[0]] ?? 1) {
         accumulator.push(currentValue);
       }
       return accumulator;
     }, []);
-
-    console.log(`build grid data for type {typeId}`);
 
     setGridData(res);
   };
@@ -68,9 +64,7 @@ const Overview = () => {
       return accumulator;
     }, []);
 
-    console.log(`Total:${grandTotal}`);
     res.push({ name: "CPG", currentValue: CPGtotal });
-
     return res;
   };
 
@@ -78,16 +72,12 @@ const Overview = () => {
     {
       eventName: "select",
       callback({ chartWrapper }) {
-        //debugger;
         var selection = chartWrapper.getChart().getSelection();
         if (selection.length > 0) {
           var item = selection[0];
           if (item.row != null) {
-            //  debugger;
-            setPieSelection(pieData[item.row + 1]);
-            var selectedRow = pieData[item.row + 1];
-            console.log("pie clicked - Selected value: " + selectedRow);
-            //debugger;
+            var selectedRow = pieDataRef.current[item.row + 1];
+            setPieSelection(selectedRow);
             if (pieStyle === PieStyleEnum.ByHoldingType) {
               setHoldingType(selectedRow);
             }
@@ -99,10 +89,8 @@ const Overview = () => {
 
   const ConvertRawDataToHarmonizedWorldIndex = (data) => {
     var total = 0;
-    // debugger;
     const res = data.reduce((accumulator, currentValue) => {
       if (currentValue.typeId === 3) {
-        //  debugger;
         total += Number(currentValue.currentValue);
       } else {
         accumulator.push(currentValue);
@@ -112,7 +100,6 @@ const Overview = () => {
     }, []);
 
     res.push({ name: "World indexes", currentValue: total });
-
     return res;
   };
 
@@ -120,7 +107,6 @@ const Overview = () => {
     var total = 0;
     const res = data.reduce((accumulator, currentValue) => {
       if (currentValue.typeId === 4) {
-        //  debugger;
         total += Number(currentValue.currentValue);
       } else {
         accumulator.push(currentValue);
@@ -130,7 +116,6 @@ const Overview = () => {
     }, []);
 
     res.push({ name: "Emerging Markets", currentValue: total });
-
     return res;
   };
 
@@ -138,7 +123,6 @@ const Overview = () => {
     var total = 0;
     const res = data.reduce((accumulator, currentValue) => {
       if (currentValue.typeId === 1) {
-        //  debugger;
         total += Number(currentValue.currentValue);
       } else {
         accumulator.push(currentValue);
@@ -148,7 +132,6 @@ const Overview = () => {
     }, []);
 
     res.push({ name: "Stocks", currentValue: total });
-
     return res;
   };
 
@@ -163,17 +146,13 @@ const Overview = () => {
     }, []);
 
     res.push({ name: "Stocks", currentValue: total });
-
     return res;
   };
 
-  const SetPieChartData = async () => {
+  const SetPieChartData = async (forceRefresh = false) => {
     setIsLoading(true);
-
-    console.log(`Getting pie chart data`);
-    //debugger;
-    let data = await GetDbData();
-    setGridData(data); //to send to holdingGrid
+    let data = await GetDbData(forceRefresh);
+    setGridData(data);
 
     if (pieStyle === PieStyleEnum.StocksOnly) {
       data = ConvertRawDataToStocksOnly(data);
@@ -184,60 +163,43 @@ const Overview = () => {
       data = ConvertRawDataToHarmonizedStocks(data);
     }
 
-    let total = 0;
-    var totalAssets = data.reduce((accumulator, currentValue) => {
-      total = Number(currentValue.currentValue); // This line seems to be unused and doesn't affect the outcome.
-      if (currentValue.currency === "USD") {
-        total = total * 1.38; //TO DO: get real value
-      }
-      return accumulator + total; // Make sure to return the updated accumulator.
-    }, 0);
-
     var i = 0;
     const pieArray = data.reduce((accumulator, currentValue) => {
-      // Clone the current object and add a new property
-
-      var value = Number(currentValue.currentValue); // This line seems to be unused and doesn't affect the outcome.
+      var value = Number(currentValue.currentValue);
       if (currentValue.currency === "USD") {
-        value = value * 1.38; //TO DO: get real value
+        value = value * 1.38;
       }
 
       const modifiedObject = [currentValue.name, Math.ceil(value)];
-
       const header = ["Holding", "Amount"];
 
       if (i === 0) {
         accumulator.push(header);
       }
-      // Push the modified object into the accumulator array
       accumulator.push(modifiedObject);
       i++;
       return accumulator;
-    }, []); // Start with an empty array as the accumulator
-    //debugger;
+    }, []);
 
-    console.log(`Setting pie chart data:${JSON.stringify(pieArray)}`);
     setPieData(pieArray);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    if (HoldingType != -1) {
-      console.log("Useeffect - holdingType changed - changeGridData");
+    if (HoldingType != -1 && HoldingType != undefined) {
       setGridData([]);
-
       GetHoldingByType(HoldingType);
     }
   }, [HoldingType]);
 
   useEffect(() => {
-    console.log("Useeffect - setPieChart");
     SetPieChartData();
     setGridData([]);
   }, [pieStyle]);
 
   useEffect(() => {
     setGridData([]);
+    pieDataRef.current = pieData;
   }, [pieData]);
 
   return (
@@ -250,7 +212,7 @@ const Overview = () => {
           <Button onClick={() => setPieStyle(PieStyleEnum.StocksOnly)}>
             Stocks Only
           </Button>
-          <Button>Three</Button>
+          <Button onClick={() => SetPieChartData(true)}>Refresh</Button>
         </ButtonGroup>
       </div>
       <div id="pieWrapper">
@@ -263,13 +225,7 @@ const Overview = () => {
           height={"300px"}
         />
       </div>
-      {gridData.length > 0 && (
-        <HoldingGrid
-          // pieStyle={pieStyle}
-          // pieSelection={pieSelection}
-          data={gridData}
-        ></HoldingGrid>
-      )}
+      {gridData.length > 0 && <HoldingGrid data={gridData}></HoldingGrid>}
     </div>
   );
 };

@@ -26,8 +26,13 @@ export const options = {
 
 export const formatters = [
   {
-    type: "ArrowFormat",
+    type: "NumberFormat",
     column: 1,
+    options: {
+      prefix: "$",
+      negativeColor: "red",
+      negativeParens: true,
+    },
   },
 ];
 
