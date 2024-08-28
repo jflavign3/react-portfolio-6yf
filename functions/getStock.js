@@ -25,7 +25,7 @@ async function getStockQuote(symbol) {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-
+    //debugger;
     const data = await response.json();
     const quote = data.quoteResponse.result[0];
     // const regularMarketPrice = quote.regularMarketPrice;
@@ -50,7 +50,7 @@ exports.handler = async (event, context) => {
     const quote = await getStockQuote(symbol);
     if (quote !== undefined) {
       stock.price = quote.regularMarketPrice;
-      stock.change = quote.regularMarketChange;
+      stock.change = quote.regularMarketChangePercent;
     }
 
     console.log("stick details:", stock);

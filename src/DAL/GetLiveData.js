@@ -25,7 +25,6 @@ const UpsertHolding = async (holding) => {
 };
 
 export const GetLiveData = async (props) => {
-  debugger;
   //const toastId = React.useRef(null);
   /*const notify = () =>
     (toastId.current = toast.success(`Hello ${test}`, { autoClose: false }));

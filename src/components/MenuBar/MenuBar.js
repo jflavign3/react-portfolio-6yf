@@ -10,6 +10,7 @@ const MenuBar = ({ setCurrentPage }) => {
 
   const menuClicked = (item) => {
     setItemActive(item.name);
+    console.log(`set item active ${item.name}`);
     setCurrentPage(item);
   };
 

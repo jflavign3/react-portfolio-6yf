@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { DeleteHolding, GetDbData } from "../../DAL/GetDbData.js";
+import { UpsertHolding } from "../../DAL/UpsertHolding.js";
 import { GetLiveData } from "../../DAL/GetLiveData.js";
 import HoldingCard from "./HoldingCard.js";
 import AddHoldingCard from "./AddHoldingCard.js";
@@ -26,6 +27,11 @@ const HoldingCards = () => {
     toDeleteId = id;
     handleOpen();
   };
+
+  const saveHolding = async (holding) => {
+    await UpsertHolding(holding);
+  };
+
   /*
   const updateHolding = async (holding) => {
     //debugger;
@@ -106,9 +112,11 @@ date.setMinutes ( date.getMinutes() + easternTimeOffset);*/
 
   const RefreshData = async (skipLiveRefresh, forceRefresh) => {
     let dbData = await GetDbData();
-    dbData = ConvertRawDataToRemoveCPG(dbData);
-    let stopLosses = ConvertRawDataToStopLossOnly(dbData);
-    setStateHoldings(stopLosses); //set inital data without prices, so that the card render immediately. Price will come after
+
+    //dbData = ConvertRawDataToRemoveCPG(dbData);
+    // let stopLosses = ConvertRawDataToStopLossOnly(dbData);
+    setStateHoldings(dbData); //set inital data without prices, so that the card render immediately. Price will come after
+
     //**note that the state value in not available yet (event loop?).  Use fucntional argument to get value right away ex ()=>
 
     if (!inMarketHours() && !forceRefresh) {
@@ -162,6 +170,7 @@ date.setMinutes ( date.getMinutes() + easternTimeOffset);*/
                 isLoading={isLoading}
                 currentHolding={currentHolding}
                 deleteHolding={deleteHoldingConfirmation}
+                saveHolding={saveHolding}
                 activeCardId={activeCardId}
                 expandCard={expandCard}
               ></HoldingCard>

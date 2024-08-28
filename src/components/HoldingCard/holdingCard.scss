@@ -1,5 +1,5 @@
 .buttonIcon {
-  width: 15px;
+  width: 25px;
 }
 
 .refreshButton {
@@ -15,16 +15,36 @@
 }
 #lockButton,
 #trashButton {
-  font-size: 17px;
+  width: 1.7rem;
+  height: 1.7rem;
 }
+#saveButton {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+.saveButton {
+  margin-left: 10px;
+}
+
+.border-color-CPG {
+  box-shadow: 0 5px 15px rgba(231, 4, 4, 0.6);
+}
+
+.border-color-index {
+  box-shadow: 0 5px 15px rgba(58, 61, 240, 0.6);
+}
+
+.border-color-stock {
+  box-shadow: 0 5px 15px rgba(8, 8, 8, 0.1);
+}
+
 .holding-card {
   padding: 12px;
   transition: var(--transition);
   background: var(--clr-grey-10);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
   max-width: 500px;
-  height: 160px;
+  height: 165px;
   &--addnew {
     cursor: pointer;
     display: flex;
@@ -117,12 +137,17 @@
   margin-bottom: 40px;
 }
 
+.kpiEditableRow {
+  display: flex;
+}
+
 .holding-card-row5 {
   display: block;
   justify-content: space-between;
   flex-wrap: wrap;
   line-height: 0;
   margin-bottom: 0;
+  margin-top: 50px;
   text-transform: capitalize;
   color: var(--clr-primary-5);
 }
@@ -139,8 +164,8 @@
 }
 
 .expand-btn {
-  width: 1.1rem;
-  height: 1.1rem;
+  width: 1.7rem;
+  height: 1.7rem;
   background-color: grey;
   color: white;
   border-radius: 50%;

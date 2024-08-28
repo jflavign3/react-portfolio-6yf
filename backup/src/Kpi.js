@@ -1,14 +1,6 @@
-const Kpi = (props) => {
-  return (
-    <>
-      <div className="kpi">
-        <div>{props.name}</div>
-        <div className="kpiValue">
-          {props.value}
-          {props.symbol}
-        </div>
-      </div>
-    </>
-  );
+import TextField from "@mui/material/TextField";
+
+const Kpie = (props) => {
+  return <></>;
 };
 export default Kpi;
