@@ -46,14 +46,14 @@ const HoldingGrid = ({ data }) => {
 
     console.log(`formatting grid data`);
 
-    // debugger;
-
     let res = data.reduce((accumulator, currentValue) => {
-      /*accumulator.push({
-        name: currentValue.name,
-        value: currentValue.currentValue,
-      });*/
-      accumulator.push([currentValue.name, currentValue.currentValue]);
+      // debugger;
+
+      let price =
+        currentValue.currentPrice <= 0
+          ? currentValue.initialPrice
+          : currentValue.currentPrice;
+      accumulator.push([currentValue.name, price * currentValue.qty]);
       return accumulator;
     }, []);
 

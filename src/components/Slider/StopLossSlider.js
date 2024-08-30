@@ -30,7 +30,8 @@ function StopLossSlider(props) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
     //debugger;
-    props.onChange(newValue);
+    var v = newValue / props.qty;
+    props.onChange(v);
   };
 
   //console.log(`From Slider: stopLossValue=${props.stopLossValue}`);

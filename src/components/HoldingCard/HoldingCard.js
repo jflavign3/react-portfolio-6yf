@@ -17,10 +17,7 @@ const HoldingCard = (props) => {
     name,
     symbol,
     currentPrice,
-    investment,
-    currentValue,
     dayChange,
-    change,
     stopLossPrice,
     qty,
     currency,
@@ -35,7 +32,6 @@ const HoldingCard = (props) => {
 
   const isExpanded = props.activeCardId === id;
 
-  const [value, setValue] = useState(0);
   const [initialPriceValue, setInitialPrice] = useState(initialPrice);
   const [qtyValue, setQty] = useState(qty);
   const [currencyValue, setCurrency] = useState(currency);
@@ -43,28 +39,27 @@ const HoldingCard = (props) => {
   const [stopLossPriceValue, setStopLossPrice] = useState(stopLossPrice);
   const [nameValue, setName] = useState(name);
 
-  const handleValueChange = (e) => {
-    debugger;
-    setValue(e);
-  };
-
   const buildHolding = (id) => {
     const holding = {
       id: id, // Assign a value to 'id'
       name: nameValue, // Assign a value to 'name'
       symbol: symbolValue,
       currentPrice: currentPrice,
-      currentValue: currentValue,
       dayChange: dayChange,
-      change: change,
       stopLossPrice: stopLossPriceValue,
       qty: qtyValue,
       currency: currencyValue,
       lastUpdate: lastUpdate,
       initialPrice: initialPriceValue,
+      typeId: typeId,
     };
 
     saveHolding(holding);
+  };
+
+  const calculatePercentageChange = (initial, current) => {
+    if (initial === 0) return 0; // Prevent division by zero
+    return (current - initial) / initial;
   };
 
   //const [showStopLoss, setShowStopLoss] = React.useState(true);
@@ -118,11 +113,34 @@ const HoldingCard = (props) => {
         <div className="holding-card-row3">
           <Kpi
             name="Investment"
-            value={qty * initialPrice} //CHANGE TO A CALCUALTED field
-            symbol="$"
+            value={(qty * initialPrice).toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            })}
           ></Kpi>
-          <Kpi name="Cur. Value" value={currentValue} symbol="$"></Kpi>
-          <Kpi name="Change" value={change} symbol="%"></Kpi>
+          <Kpi
+            name="Cur. Value"
+            value={(typeId === 2
+              ? initialPrice
+              : qty * currentPrice
+            ).toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+            })}
+          ></Kpi>
+          <Kpi
+            name="Change"
+            value={calculatePercentageChange(
+              initialPrice,
+              currentPrice
+            ).toLocaleString("en-US", {
+              style: "percent",
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          ></Kpi>
 
           {}
         </div>
@@ -170,32 +188,31 @@ const HoldingCard = (props) => {
               <div className="kpiEditableRow">
                 <KpiEditable
                   name="initialPrice"
-                  value={initialPrice}
+                  value={initialPriceValue}
                   onChange={setInitialPrice}
                   sign="$"
                 ></KpiEditable>
                 <KpiEditable
                   name="qty"
-                  value={qty}
+                  value={qtyValue}
                   onChange={setQty}
-                  sign="$"
                 ></KpiEditable>
               </div>
               <div className="kpiEditableRow">
                 <KpiEditable
                   name="currency"
-                  value={currency}
+                  value={currencyValue}
                   onChange={setCurrency}
                 ></KpiEditable>
                 <KpiEditable
                   name="symbol"
-                  value={symbol}
+                  value={symbolValue}
                   onChange={setSymbol}
                 ></KpiEditable>
               </div>
               <KpiEditable
                 name="name"
-                value={name}
+                value={nameValue}
                 onChange={setName}
               ></KpiEditable>
             </div>
@@ -203,9 +220,10 @@ const HoldingCard = (props) => {
               <div className="holding-card-row5">
                 <StopLossSlider
                   stopLossValue={stopLossPrice * qty}
-                  currentValue={currentValue}
+                  currentValue={Math.ceil(currentPrice * qty)}
                   currentPrice={currentPrice}
-                  investment={investment}
+                  investment={initialPrice * qty}
+                  qty={qty}
                   onChange={setStopLossPrice}
                 />
               </div>

@@ -47,6 +47,7 @@ const Overview = () => {
       return accumulator;
     }, []);
 
+    //debugger;
     setGridData(res);
   };
 
@@ -55,15 +56,23 @@ const Overview = () => {
     var CPGtotal = 0;
     const res = data.reduce((accumulator, currentValue) => {
       if (currentValue.typeId === 2) {
-        CPGtotal += Number(currentValue.currentValue);
+        //debugger;
+        CPGtotal += Number(currentValue.initialPrice);
+        currentValue.currentPrice = Number(currentValue.initialPrice);
       } else {
         accumulator.push(currentValue);
       }
-      grandTotal += Number(currentValue.currentValue);
+      /*  console.log(
+        Number(currentValue.currentPrice * currentValue.qty) +
+          "  " +
+          currentValue.symbol
+      );*/
+      //debugger;
+      grandTotal += Number(currentValue.currentPrice * currentValue.qty);
 
       return accumulator;
     }, []);
-
+    console.log(grandTotal);
     res.push({ name: "CPG", currentValue: CPGtotal });
     return res;
   };
@@ -91,7 +100,7 @@ const Overview = () => {
     var total = 0;
     const res = data.reduce((accumulator, currentValue) => {
       if (currentValue.typeId === 3) {
-        total += Number(currentValue.currentValue);
+        total += Number(currentValue.currentPrice * currentValue.qty);
       } else {
         accumulator.push(currentValue);
       }
@@ -107,7 +116,7 @@ const Overview = () => {
     var total = 0;
     const res = data.reduce((accumulator, currentValue) => {
       if (currentValue.typeId === 4) {
-        total += Number(currentValue.currentValue);
+        total += Number(currentValue.currentPrice * currentValue.qty);
       } else {
         accumulator.push(currentValue);
       }
@@ -123,7 +132,7 @@ const Overview = () => {
     var total = 0;
     const res = data.reduce((accumulator, currentValue) => {
       if (currentValue.typeId === 1) {
-        total += Number(currentValue.currentValue);
+        total += Number(currentValue.currentPrice * currentValue.qty);
       } else {
         accumulator.push(currentValue);
       }
@@ -165,6 +174,7 @@ const Overview = () => {
 
     var i = 0;
     const pieArray = data.reduce((accumulator, currentValue) => {
+      //debugger;
       var value = Number(currentValue.currentValue);
       if (currentValue.currency === "USD") {
         value = value * 1.38;

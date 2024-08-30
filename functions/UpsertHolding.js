@@ -12,14 +12,13 @@ exports.handler = async (event, context) => {
       name,
       symbol,
       currentPrice,
-      investment,
-      currentValue,
       dayChange,
-      change,
       stopLossPrice,
       qty,
       currency,
+      initialPrice,
       lastUpdate,
+      typeId,
     } = JSON.parse(event.body); //deconstruct*/
 
     console.log("body:" + event.body);
@@ -34,26 +33,25 @@ exports.handler = async (event, context) => {
         name: name,
         symbol: symbol,
         currentPrice: currentPrice,
-        investment: investment,
-        currentValue: currentValue,
         dayChange: dayChange,
-        change: change,
         stopLossPrice: stopLossPrice,
         qty: qty,
         currency: currency,
+        initialPrice: initialPrice,
         lastUpdate: lastUpdate,
+        typeId: typeId,
       },
     };
 
     const result = await collection.updateOne(filter, updateDoc, options);
 
-    /*
-   if (result.deletedCount === 1) {
+    if (result.deletedCount === 1) {
       console.log("Successfully deleted one document.");
     } else {
       console.log("No documents matched the query. Deleted 0 documents.");
     }
-    */
+
+    console.log("success " + JSON.stringify(result));
     return {
       statusCode: 200,
       body: JSON.stringify(result),

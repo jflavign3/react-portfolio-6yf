@@ -25,6 +25,7 @@ const UpsertHolding = async (holding) => {
 };
 
 export const GetLiveData = async (props) => {
+  debugger;
   //const toastId = React.useRef(null);
   /*const notify = () =>
     (toastId.current = toast.success(`Hello ${test}`, { autoClose: false }));
@@ -41,7 +42,7 @@ export const GetLiveData = async (props) => {
       i++;
       console.log(`getting ${holding.symbol} (${i} out of ${totalHoldings})`);
       const response = await fetch(url + holding.symbol); //coudl remove await and add promises to array, then wait all
-      debugger;
+      //  debugger;
       var { price, change } = await response.json();
       //price = price.replace(/"/g, "");
       console.log(`....received ${holding.symbol} ${price}`);

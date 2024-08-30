@@ -22,14 +22,28 @@ const HoldingCards = () => {
   const [activeCardId, setActiveCardId] = useState(null);
   const [open, setOpen] = useState(false);
 
+  const newHolding = {
+    $set: {
+      name: "",
+      symbol: "",
+      qty: 0,
+      currency: "",
+      initialPrice: 0,
+      typeId: 0,
+    },
+  };
+
   //to do, put in TS
   const deleteHoldingConfirmation = async (id) => {
     toDeleteId = id;
     handleOpen();
+    RefreshData(true, true);
   };
 
   const saveHolding = async (holding) => {
     await UpsertHolding(holding);
+
+    RefreshData(true, true);
   };
 
   /*
@@ -42,7 +56,7 @@ const HoldingCards = () => {
     handleClose();
     //var holdings = stateHoldings.filter((x) => x.id !== toDeleteId);
     await DeleteHolding(toDeleteId);
-    RefreshData(true);
+    RefreshData(true, true);
   }
 
   const expandCard = (id) => {
@@ -110,19 +124,19 @@ date.setMinutes ( date.getMinutes() + easternTimeOffset);*/
     return res;
   };
 
-  const RefreshData = async (skipLiveRefresh, forceRefresh) => {
-    let dbData = await GetDbData();
+  const RefreshData = async (skipLiveRefresh, forceDbRefresh) => {
+    let dbData = await GetDbData(forceDbRefresh);
 
     //dbData = ConvertRawDataToRemoveCPG(dbData);
     // let stopLosses = ConvertRawDataToStopLossOnly(dbData);
     setStateHoldings(dbData); //set inital data without prices, so that the card render immediately. Price will come after
 
     //**note that the state value in not available yet (event loop?).  Use fucntional argument to get value right away ex ()=>
-
-    if (!inMarketHours() && !forceRefresh) {
-      toast.info(`Markets are closed`);
+    /*
+    if (!inMarketHours() || skipLiveRefresh) {
+      //toast.info(`Markets are closed`);
       skipLiveRefresh = true;
-    }
+    }*/
 
     if (skipLiveRefresh) return;
     setIsLoading(true);
@@ -143,7 +157,7 @@ date.setMinutes ( date.getMinutes() + easternTimeOffset);*/
     didInit = true;
     console.log(`initializing. Set stale data.`);
 
-    RefreshData(true); //shoulnt have usestate inside a condition !!! but here we go
+    RefreshData(true, true); //shoulnt have usestate inside a condition !!! but here we go
   }
 
   /*
@@ -176,7 +190,11 @@ date.setMinutes ( date.getMinutes() + easternTimeOffset);*/
               ></HoldingCard>
             );
           })}
-          <AddHoldingCard key="-1" isLoading="false"></AddHoldingCard>
+          <AddHoldingCard
+            key="-1"
+            saveHolding={saveHolding}
+            currentHolding={newHolding}
+          ></AddHoldingCard>
 
           <Dialog
             open={open}
