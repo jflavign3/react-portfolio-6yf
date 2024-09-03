@@ -180,7 +180,7 @@ date.setMinutes ( date.getMinutes() + easternTimeOffset);*/
           {stateHoldings.map((currentHolding) => {
             return (
               <HoldingCard
-                key={currentHolding.id}
+                key={currentHolding.name}
                 isLoading={isLoading}
                 currentHolding={currentHolding}
                 deleteHolding={deleteHoldingConfirmation}

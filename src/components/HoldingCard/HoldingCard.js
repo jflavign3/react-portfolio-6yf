@@ -9,6 +9,10 @@ import StopLossSlider from "../Slider/StopLossSlider.js";
 import * as React from "react";
 import { FaTrashAlt, FaRegSave } from "react-icons/fa";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const HoldingCard = (props) => {
   //debugger;
@@ -38,6 +42,7 @@ const HoldingCard = (props) => {
   const [symbolValue, setSymbol] = useState(symbol);
   const [stopLossPriceValue, setStopLossPrice] = useState(stopLossPrice);
   const [nameValue, setName] = useState(name);
+  const [typeIdValue, setTypeId] = useState(typeId);
 
   const buildHolding = (id) => {
     const holding = {
@@ -55,6 +60,13 @@ const HoldingCard = (props) => {
     };
 
     saveHolding(holding);
+  };
+
+  const handleCurrencyChange = (event) => {
+    setCurrency(event.target.value);
+  };
+  const handleTypeIdChange = (event) => {
+    setTypeId(event.target.value);
   };
 
   const calculatePercentageChange = (initial, current) => {
@@ -200,9 +212,9 @@ const HoldingCard = (props) => {
               </div>
               <div className="kpiEditableRow">
                 <KpiEditable
-                  name="currency"
-                  value={currencyValue}
-                  onChange={setCurrency}
+                  name="name"
+                  value={nameValue}
+                  onChange={setName}
                 ></KpiEditable>
                 <KpiEditable
                   name="symbol"
@@ -210,11 +222,39 @@ const HoldingCard = (props) => {
                   onChange={setSymbol}
                 ></KpiEditable>
               </div>
-              <KpiEditable
-                name="name"
-                value={nameValue}
-                onChange={setName}
-              ></KpiEditable>
+              <div className="kpiEditableRow">
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Currency
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={currencyValue}
+                    label="Currency"
+                    onChange={handleCurrencyChange}
+                  >
+                    <MenuItem value={"CAD"}>CAD</MenuItem>
+                    <MenuItem value={"USD"}>USD</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={typeIdValue}
+                    label="Type"
+                    onChange={handleTypeIdChange}
+                  >
+                    <MenuItem value={1}>Stock</MenuItem>
+                    <MenuItem value={2}>CPG</MenuItem>
+                    <MenuItem value={3}>World Index</MenuItem>
+                    <MenuItem value={4}>Emerging</MenuItem>
+                    <MenuItem value={0}>other</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
             </div>
             {stopLossPrice && (
               <div className="holding-card-row5">
