@@ -2,25 +2,33 @@ import { FaPlus } from "react-icons/fa";
 
 import "./holdingCard.scss";
 import { useState } from "react";
-import usa from "../../images/usa.png";
-import canada from "../../images/canada.png";
 import KpiEditable from "../../KpiEditable.js";
 import * as React from "react";
 import { FaRegSave } from "react-icons/fa";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const AddHoldingCard = (props) => {
   //debugger;
-  const { id, name, symbol, qty, currency, typeId, initialPrice } =
-    props.currentHolding;
+  const { id, name, symbol, qty, initialPrice } = props.currentHolding;
   const saveHolding = props.saveHolding;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [initialPriceValue, setInitialPrice] = useState(initialPrice);
-  const [qtyValue, setQty] = useState(qty);
-  const [currencyValue, setCurrency] = useState(currency);
-  const [symbolValue, setSymbol] = useState(symbol);
-  const [nameValue, setName] = useState(name);
-  const [typeIdValue, setTypeIdValue] = useState(typeId);
+  const [initialPriceValue, setInitialPrice] = useState(0);
+  const [qtyValue, setQty] = useState(0);
+  const [currencyValue, setCurrency] = useState("CAD");
+  const [symbolValue, setSymbol] = useState("");
+  const [nameValue, setName] = useState("");
+  const [typeIdValue, setTypeId] = useState(1);
+
+  const handleCurrencyChange = (event) => {
+    setCurrency(event.target.value);
+  };
+  const handleTypeIdChange = (event) => {
+    setTypeId(event.target.value);
+  };
 
   const buildHolding = (id) => {
     const holding = {
@@ -30,7 +38,7 @@ const AddHoldingCard = (props) => {
       qty: qtyValue,
       currency: currencyValue,
       initialPrice: initialPriceValue,
-      typeId: typeId,
+      typeId: typeIdValue,
     };
 
     saveHolding(holding);
@@ -75,9 +83,9 @@ const AddHoldingCard = (props) => {
               </div>
               <div className="kpiEditableRow">
                 <KpiEditable
-                  name="currency"
-                  value={currencyValue}
-                  onChange={setCurrency}
+                  name="name"
+                  value={nameValue}
+                  onChange={setName}
                 ></KpiEditable>
                 <KpiEditable
                   name="symbol"
@@ -85,16 +93,38 @@ const AddHoldingCard = (props) => {
                   onChange={setSymbol}
                 ></KpiEditable>
               </div>
-              <KpiEditable
-                name="name"
-                value={nameValue}
-                onChange={setName}
-              ></KpiEditable>
-              <KpiEditable
-                name="typeId"
-                value={typeIdValue}
-                onChange={setTypeIdValue}
-              ></KpiEditable>
+
+              <div className="kpiEditableRow select-label">
+                <FormControl fullWidth>
+                  <InputLabel>Currency</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={currencyValue}
+                    label="Currency"
+                    onChange={handleCurrencyChange}
+                  >
+                    <MenuItem value={"CAD"}>CAD</MenuItem>
+                    <MenuItem value={"USD"}>USD</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={typeIdValue}
+                    label="Type"
+                    onChange={handleTypeIdChange}
+                  >
+                    <MenuItem value={1}>Stock</MenuItem>
+                    <MenuItem value={2}>CPG</MenuItem>
+                    <MenuItem value={3}>World Index</MenuItem>
+                    <MenuItem value={4}>Emerging</MenuItem>
+                    <MenuItem value={0}>other</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
             </div>
           </div>
         </div>
