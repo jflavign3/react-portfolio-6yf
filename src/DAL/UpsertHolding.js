@@ -3,6 +3,10 @@ import { toast } from "react-toastify";
 //dialog box   https://mui.com/material-ui/react-dialog/
 
 export const UpsertHolding = async (holding) => {
+  debugger;
+  if (holding.typeId == 2) return null;
+
+  return null;
   const url = `/.netlify/functions/UpsertHolding`;
 
   const response = await fetch(url, {

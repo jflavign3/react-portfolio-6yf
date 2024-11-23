@@ -41,6 +41,7 @@ const HoldingCards = () => {
   };
 
   const saveHolding = async (holding) => {
+    debugger;
     await UpsertHolding(holding);
 
     RefreshData(true, true);

@@ -44,20 +44,23 @@ const HoldingGrid = ({ data }) => {
   const FormatGridData = async () => {
     setIsLoading(true);
 
+    //debugger;
     console.log(`formatting grid data`);
 
-    let res = data.reduce((accumulator, currentValue) => {
-      // debugger;
+    let total = 0; // Initialize total outside the reduce
 
-      let price =
-        currentValue.currentPrice <= 0
-          ? currentValue.initialPrice
-          : currentValue.currentPrice;
-      accumulator.push([currentValue.name, price * currentValue.qty]);
+    let res = data.reduce((accumulator, currentStock) => {
+      accumulator.push([currentStock.name, currentStock.value]);
+
+      // Update the total
+      total += Number(currentStock.value);
+
       return accumulator;
     }, []);
+    res.sort((a, b) => a[1] - b[1]);
 
     res.unshift(["name", "total"]);
+    res.push(["Total", total]);
 
     setGridData(res);
   };

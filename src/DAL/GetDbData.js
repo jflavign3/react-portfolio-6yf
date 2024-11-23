@@ -5,8 +5,10 @@ import { toast } from "react-toastify";
 export const GetDbData = async (forceRefresh) => {
   const getHoldings_url = "/.netlify/functions/getHoldings";
 
-  var result;
+  const USD_TO_CAD_RATE = 1.38;
 
+  var result;
+  //debugger;
   if (
     forceRefresh ||
     sessionStorage["data"] === null ||
@@ -14,7 +16,17 @@ export const GetDbData = async (forceRefresh) => {
   ) {
     console.log("Storage empty. Getting data from db");
     result = await fetch(getHoldings_url).then((response) => response.json());
-    sessionStorage["data"] = JSON.stringify(result);
+
+    //debugger;
+    const res = result.map((item) => ({
+      ...item,
+      value:
+        (item.currency == "USD"
+          ? item.currentPrice * USD_TO_CAD_RATE
+          : item.currentPrice) * item.qty,
+    }));
+
+    sessionStorage["data"] = JSON.stringify(res);
   } else {
     console.log("Storage full. Getting data from storage");
     result = JSON.parse(sessionStorage["data"]);
