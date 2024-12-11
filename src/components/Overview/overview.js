@@ -15,37 +15,47 @@ const CHART_OPTIONS = {
 };
 
 const PIE_STYLE = {
-  BY_HOLDING_TYPE: 0,
+  HOLDING_TYPE: 0,
   STOCKS_ONLY: 1,
+  GEO: 2,
 };
 
 const HOLDING_TYPE = {
   STOCKS: 1,
   CPG: 2,
   WORLD_INDEXES: 3,
-  EMERGING_MARKETS: 4,
+};
+
+//XAW:  USA 67%  EMRG: 10%  EAFE 22.5% (japan 25%, UK 15%, FR: 10%, SWISS 9%, GERMANY 8%, other: 33%)
+const GEO = {
+  CANADA: 1,
+  USA: 2,
+  EUROPE: 3,
+  JAPAN: 4,
+  EMERGING: 5,
 };
 
 const USD_TO_CAD_RATE = 1.38;
+const xawRatio = {
+  ["USA"]: 0.66,
+  ["JAPAN"]: 0.05,
+  ["EUROPE"]: 0.165,
+  ["EMERGING"]: 0.1,
+};
 
 const Overview = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [gridData, setGridData] = useState([]);
-  const [bigTotal, setBigTotal] = useState(0);
   const [pieData, setPieData] = useState([]);
   const [pieStyle, setPieStyle] = useState(PIE_STYLE.BY_HOLDING_TYPE);
   const [selectedHoldingType, setSelectedHoldingType] = useState({});
-  //const pieDataRef = useRef(pieData);
-
-  // Data transformation functions
-  const calculateHoldingValue = (holding) => {
-    const value = holding.value || holding.currentPrice * holding.qty;
-    return holding.currency === "USD" ? value * USD_TO_CAD_RATE : value;
-  };
+  const pieStyleRef = useRef(pieStyle);
+  const pieDataRef = useRef(pieData);
 
   const handlePieStyleChange = (newStyle) => {
+    //debugger;
     setPieStyle(newStyle);
-    setGridData([]);
+    pieStyleRef.current = newStyle; //to be available now
   };
 
   const getHoldingsForType = async (type) => {
@@ -58,7 +68,34 @@ const Overview = () => {
     setGridData(filteredData);
   };
 
+  const getHoldingsForCountries = async (country) => {
+    const data = await GetDbData();
+
+    const geoFilters = {
+      ["CANADA"]: isCanadian,
+      ["USA"]: isUSA,
+      ["JAPAN"]: isJapan,
+      ["EUROPE"]: isEurope,
+      ["EMERGING"]: isEmerging,
+    };
+
+    const filterFunction = geoFilters[country];
+    const ratio = xawRatio[country];
+
+    if (filterFunction) {
+      var filteredData = data.filter(filterFunction);
+    }
+
+    const updatedData = filteredData.map((item) =>
+      item.symbol === "XAW.TO" ? { ...item, value: item.value * ratio } : item
+    );
+    //debugger;
+    console.log("set new grid data: " + JSON.stringify(updatedData));
+    setGridData(updatedData);
+  };
+
   const aggregateHoldingsByType = (data, typeId, name) => {
+    // debugger;
     const total = data.reduce((sum, item) => {
       if (item.typeId === typeId) {
         return sum + Number(item.value || 0); // Default to 0 if value is undefined
@@ -68,74 +105,195 @@ const Overview = () => {
     return { name, totalValueOfHoldingType: total };
   };
 
-  const transformDataForChart = (rawData) => {
-    // debugger;
-    if (pieStyle === PIE_STYLE.STOCKS_ONLY) {
-      return rawData.filter((item) => item.typeId === HOLDING_TYPE.STOCKS);
+  const isCanadian = (item) => {
+    var symbol = item.symbol.toUpperCase();
+    if (
+      (item.typeId === HOLDING_TYPE.CPG ||
+        symbol.endsWith(".TO") ||
+        symbol.endsWith(".V")) &&
+      symbol != "EBIT.TO" &&
+      symbol != "MNT.TO" &&
+      symbol != "XAW.TO" &&
+      symbol != "CWW.TO" &&
+      symbol != "VFV.TO" &&
+      symbol != "JAPN.TO" &&
+      symbol != "ZCH.TO"
+    ) {
+      return true;
     }
-
-    // debugger;
-    const holdingsData = [
-      aggregateHoldingsByType(rawData, HOLDING_TYPE.STOCKS, "STOCKS"),
-      aggregateHoldingsByType(rawData, HOLDING_TYPE.CPG, "CPG"),
-      aggregateHoldingsByType(
-        rawData,
-        HOLDING_TYPE.WORLD_INDEXES,
-        "WORLD_INDEXES"
-      ),
-      aggregateHoldingsByType(
-        rawData,
-        HOLDING_TYPE.EMERGING_MARKETS,
-        "EMERGING_MARKETS"
-      ),
-    ];
-
-    // debugger;
-    return holdingsData;
+    return false;
   };
 
-  const formatPieData = (data) => {
+  const isUSA = (item) => {
+    var symbol = item.symbol.toUpperCase();
+    if (
+      (item.typeId === HOLDING_TYPE.STOCKS &&
+        symbol != "YCS" &&
+        !symbol.endsWith(".TO") &&
+        !symbol.endsWith(".V")) ||
+      symbol == "XAW.TO" ||
+      symbol == "VFV.TO"
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const isEurope = (item) => {
+    var symbol = item.symbol.toUpperCase();
+    if (symbol == "XAW.TO") {
+      return true;
+    }
+    return false;
+  };
+
+  const isEmerging = (item) => {
+    var symbol = item.symbol.toUpperCase();
+    if (symbol == "XAW.TO") {
+      return true;
+    }
+    return false;
+  };
+
+  const isJapan = (item) => {
+    var symbol = item.symbol.toUpperCase();
+    if (symbol == "XAW.TO" || symbol == "JAPN.TO") {
+      return true;
+    }
+    return false;
+  };
+
+  const aggregateHoldingsByGeo = (data, geo, name) => {
     //debugger;
+    console.log(`geo id: ` + geo);
+    const total = data.reduce((sum, item) => {
+      //CAD = CPG BNC, CPG EPQ, stockS with .TO
+      //USA = stocks no TO, 66% of XAW
+      //EUROPE:  16.5% of XAW
+      //JAPAN:  JPN etf + 5.5% of XAW
+      //EMERGING:  10% xaw
+      var symbol = item.symbol.toUpperCase();
+
+      if (geo == GEO.CANADA) {
+        if (isCanadian(item)) {
+          console.log(symbol + ` `);
+          return sum + Number(item.value || 0); // Default to 0 if value is undefined
+        }
+      }
+
+      if (geo == GEO.USA) {
+        var value = item.value;
+        if (isUSA(item)) {
+          if (symbol.toUpperCase() == "XAW.TO") {
+            debugger;
+            value = value * xawRatio["USA"];
+          }
+          return sum + Number(value || 0); // Default to 0 if value is undefined
+        }
+      }
+
+      if (geo == GEO.EUROPE) {
+        //debugger;
+        if (isEurope(item)) {
+          return sum + Number(item.value * xawRatio["EUROPE"] || 0); // Default to 0 if value is undefined
+        }
+      }
+
+      if (geo == GEO.JAPAN) {
+        //debugger;
+        if (symbol.toUpperCase() == "XAW.TO") {
+          return sum + Number(item.value * xawRatio["JAPAN"] || 0); // Default to 0 if value is undefined
+        } else {
+          return sum + Number(value || 0);
+        }
+      }
+
+      if (geo == GEO.EMERGING) {
+        if (symbol.toUpperCase() == "XAW.TO") {
+          return sum + Number(item.value * xawRatio["EMERGING"] || 0); // Default to 0 if value is undefined
+        }
+      }
+
+      return sum;
+    }, 0);
+    return { name, totalValueOfHoldingType: total };
+  };
+
+  const transformDataForChart = (rawData) => {
     const header = ["Holding", "Amount"];
-    const rows = data.map((holding) => [
-      holding.name,
-      Math.ceil(holding.totalValueOfHoldingType),
-    ]);
+
+    if (pieStyle === PIE_STYLE.STOCKS_ONLY) {
+      var holdingsData = rawData.filter(
+        (item) => item.typeId === HOLDING_TYPE.STOCKS
+      );
+      var rows = holdingsData.map((holding) => [
+        holding.name,
+        Math.ceil(holding.value),
+      ]);
+    } else if (pieStyle === PIE_STYLE.HOLDING_TYPE) {
+      // debugger;
+      const holdingsData = [
+        aggregateHoldingsByType(rawData, HOLDING_TYPE.STOCKS, "STOCKS"),
+        aggregateHoldingsByType(rawData, HOLDING_TYPE.CPG, "CPG"),
+        aggregateHoldingsByType(
+          rawData,
+          HOLDING_TYPE.WORLD_INDEXES,
+          "WORLD_INDEXES"
+        ),
+      ];
+      var rows = holdingsData.map((holding) => [
+        holding.name,
+        Math.ceil(holding.totalValueOfHoldingType),
+      ]);
+    } else if (pieStyle === PIE_STYLE.GEO) {
+      // debugger;
+      const holdingsData = [
+        aggregateHoldingsByGeo(rawData, GEO.CANADA, "CANADA"),
+        aggregateHoldingsByGeo(rawData, GEO.USA, "USA"),
+        aggregateHoldingsByGeo(rawData, GEO.EUROPE, "EUROPE"),
+        aggregateHoldingsByGeo(rawData, GEO.JAPAN, "JAPAN"),
+        aggregateHoldingsByGeo(rawData, GEO.EMERGING, "EMERGING"),
+      ];
+      var rows = holdingsData.map((holding) => [
+        holding.name,
+        Math.ceil(holding.totalValueOfHoldingType),
+      ]);
+    }
+
     return [header, ...rows];
   };
 
   const handleChartSelect = ({ chartWrapper }) => {
-    // debugger;
     const selection = chartWrapper.getChart().getSelection();
     if (selection.length > 0 && selection[0].row != null) {
-      // Use pieData directly instead of ref
-      const selectedRow = pieData[selection[0].row + 1];
-      if (pieStyle === PIE_STYLE.BY_HOLDING_TYPE) {
+      const selectedRow = pieDataRef.current[selection[0].row + 1]; // Use ref to access latest data
+      if (pieStyleRef.current === PIE_STYLE.BY_HOLDING_TYPE) {
         setSelectedHoldingType(selectedRow);
+      }
+      if (pieStyleRef.current === PIE_STYLE.GEO) {
+        setGridData([]);
+        getHoldingsForCountries(selectedRow[0]);
+        //setSelectedGEO(selectedRow);
       }
     }
   };
 
   const updatePieChartData = async (forceRefresh = false) => {
+    //debugger;
+    console.log(`Update Pie Chart data`);
     setIsLoading(true);
     try {
       const rawData = await GetDbData(forceRefresh);
 
       setGridData(rawData);
 
-      const transformedData = transformDataForChart(rawData);
-      // debugger;
-      const formattedPieData = formatPieData(transformedData);
+      //debugger;
+      const formattedPieData = transformDataForChart(rawData);
 
-      // Summing up only valid numbers in the `value` property
-      /*const sum = formattedPieData.reduce((acc, obj) => {
-        const numValue = Number(obj[1]);
-        return isNaN(numValue) ? acc : acc + numValue;
-      }, 0);
-
-      setBigTotal(sum);*/
-
+      console.log(`Set Pie  data : ` + formattedPieData);
       setPieData(formattedPieData);
+
+      pieDataRef.current = formattedPieData; //to be available now
     } catch (error) {
       console.error("Error updating pie chart data:", error);
     } finally {
@@ -143,7 +301,7 @@ const Overview = () => {
     }
   };
 
-  // Effects
+  // WHEN PIE IS CLICKED in holding types
   useEffect(() => {
     //debugger;
     if (selectedHoldingType !== -1 && selectedHoldingType !== undefined) {
@@ -157,25 +315,26 @@ const Overview = () => {
     updatePieChartData();
   }, [pieStyle]);
 
-  /*useEffect(() => {
-    debugger;
-    updatePieChartData();
-  }, [gridData]);*/
-
   return (
     <div className="overview">
       <ButtonGroup variant="contained" aria-label="View options">
         <Button
-          onClick={() => handlePieStyleChange(PIE_STYLE.BY_HOLDING_TYPE)}
+          onClick={() => handlePieStyleChange(PIE_STYLE.HOLDING_TYPE)}
           disabled={isLoading}
         >
-          By Type
+          Type
         </Button>
         <Button
           onClick={() => handlePieStyleChange(PIE_STYLE.STOCKS_ONLY)}
           disabled={isLoading}
         >
-          Stocks Only
+          Stocks
+        </Button>
+        <Button
+          onClick={() => handlePieStyleChange(PIE_STYLE.GEO)}
+          disabled={isLoading}
+        >
+          COUNTRY
         </Button>
         <Button onClick={() => updatePieChartData(true)} disabled={isLoading}>
           {isLoading ? "Loading..." : "Refresh"}

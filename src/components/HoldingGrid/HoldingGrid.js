@@ -68,7 +68,7 @@ const HoldingGrid = ({ data }) => {
   useEffect(() => {
     console.log("grid update");
     FormatGridData();
-  }, []);
+  }, [data]);
 
   return (
     <>
