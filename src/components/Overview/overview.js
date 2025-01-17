@@ -35,7 +35,7 @@ const GEO = {
   EMERGING: 5,
 };
 
-const USD_TO_CAD_RATE = 1.38;
+const USD_TO_CAD_RATE = 1.44;
 const xawRatio = {
   ["USA"]: 0.66,
   ["JAPAN"]: 0.05,
