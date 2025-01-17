@@ -356,8 +356,9 @@ const Overview = () => {
           height="300px"
         />
       </div>
-
-      {gridData.length > 0 && <HoldingGrid data={gridData} />}
+      <div className="bottomGrid">
+        {gridData.length > 0 && <HoldingGrid data={gridData} />}
+      </div>
     </div>
   );
 };
