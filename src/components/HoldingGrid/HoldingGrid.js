@@ -47,6 +47,7 @@ const HoldingGrid = ({ data }) => {
     //debugger;
     console.log(`formatting grid data`);
 
+    debugger;
     let total = 0; // Initialize total outside the reduce
 
     let res = data.reduce((accumulator, currentStock) => {

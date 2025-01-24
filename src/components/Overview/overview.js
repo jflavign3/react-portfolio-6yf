@@ -47,7 +47,7 @@ const Overview = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [gridData, setGridData] = useState([]);
   const [pieData, setPieData] = useState([]);
-  const [pieStyle, setPieStyle] = useState(PIE_STYLE.BY_HOLDING_TYPE);
+  const [pieStyle, setPieStyle] = useState(PIE_STYLE.HOLDING_TYPE);
   const [selectedHoldingType, setSelectedHoldingType] = useState({});
   const pieStyleRef = useRef(pieStyle);
   const pieDataRef = useRef(pieData);
@@ -89,13 +89,12 @@ const Overview = () => {
     const updatedData = filteredData.map((item) =>
       item.symbol === "XAW.TO" ? { ...item, value: item.value * ratio } : item
     );
-    //debugger;
+
     console.log("set new grid data: " + JSON.stringify(updatedData));
     setGridData(updatedData);
   };
 
   const aggregateHoldingsByType = (data, typeId, name) => {
-    // debugger;
     const total = data.reduce((sum, item) => {
       if (item.typeId === typeId) {
         return sum + Number(item.value || 0); // Default to 0 if value is undefined
@@ -114,7 +113,6 @@ const Overview = () => {
       symbol != "EBIT.TO" &&
       symbol != "MNT.TO" &&
       symbol != "XAW.TO" &&
-      symbol != "CWW.TO" &&
       symbol != "VFV.TO" &&
       symbol != "JAPN.TO" &&
       symbol != "ZCH.TO"
@@ -164,7 +162,6 @@ const Overview = () => {
   };
 
   const aggregateHoldingsByGeo = (data, geo, name) => {
-    //debugger;
     console.log(`geo id: ` + geo);
     const total = data.reduce((sum, item) => {
       //CAD = CPG BNC, CPG EPQ, stockS with .TO
@@ -185,7 +182,6 @@ const Overview = () => {
         var value = item.value;
         if (isUSA(item)) {
           if (symbol.toUpperCase() == "XAW.TO") {
-            debugger;
             value = value * xawRatio["USA"];
           }
           return sum + Number(value || 0); // Default to 0 if value is undefined
@@ -193,14 +189,12 @@ const Overview = () => {
       }
 
       if (geo == GEO.EUROPE) {
-        //debugger;
         if (isEurope(item)) {
           return sum + Number(item.value * xawRatio["EUROPE"] || 0); // Default to 0 if value is undefined
         }
       }
 
       if (geo == GEO.JAPAN) {
-        //debugger;
         if (symbol.toUpperCase() == "XAW.TO") {
           return sum + Number(item.value * xawRatio["JAPAN"] || 0); // Default to 0 if value is undefined
         } else {
@@ -246,7 +240,6 @@ const Overview = () => {
         Math.ceil(holding.totalValueOfHoldingType),
       ]);
     } else if (pieStyle === PIE_STYLE.GEO) {
-      // debugger;
       const holdingsData = [
         aggregateHoldingsByGeo(rawData, GEO.CANADA, "CANADA"),
         aggregateHoldingsByGeo(rawData, GEO.USA, "USA"),
@@ -254,6 +247,7 @@ const Overview = () => {
         aggregateHoldingsByGeo(rawData, GEO.JAPAN, "JAPAN"),
         aggregateHoldingsByGeo(rawData, GEO.EMERGING, "EMERGING"),
       ];
+
       var rows = holdingsData.map((holding) => [
         holding.name,
         Math.ceil(holding.totalValueOfHoldingType),
@@ -279,7 +273,6 @@ const Overview = () => {
   };
 
   const updatePieChartData = async (forceRefresh = false) => {
-    //debugger;
     console.log(`Update Pie Chart data`);
     setIsLoading(true);
     try {
@@ -287,7 +280,6 @@ const Overview = () => {
 
       setGridData(rawData);
 
-      //debugger;
       const formattedPieData = transformDataForChart(rawData);
 
       console.log(`Set Pie  data : ` + formattedPieData);
