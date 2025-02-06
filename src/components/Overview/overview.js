@@ -130,7 +130,8 @@ const Overview = () => {
         !symbol.endsWith(".TO") &&
         !symbol.endsWith(".V")) ||
       symbol == "XAW.TO" ||
-      symbol == "VFV.TO"
+      symbol == "VFV.TO" ||
+      symbol == "CWS"
     ) {
       return true;
     }
