@@ -42,6 +42,10 @@ const xawRatio = {
   ["EUROPE"]: 0.165,
   ["EMERGING"]: 0.1,
 };
+const xefRatio = {
+  ["JAPAN"]: 0.23,
+  ["EUROPE"]: 0.77,
+};
 
 const Overview = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -80,15 +84,20 @@ const Overview = () => {
     };
 
     const filterFunction = geoFilters[country];
-    const ratio = xawRatio[country];
+    const xawRatioForCountry = xawRatio[country];
+    const xefRatioForCountry = xefRatio[country];
 
-    if (filterFunction) {
-      var filteredData = data.filter(filterFunction);
-    }
+    const filteredData = filterFunction ? data.filter(filterFunction) : data;
 
-    const updatedData = filteredData.map((item) =>
-      item.symbol === "XAW.TO" ? { ...item, value: item.value * ratio } : item
-    );
+    let updatedData = filteredData.map((entry) => {
+      if (entry.symbol === "XAW.TO") {
+        return { ...entry, value: entry.value * xawRatioForCountry };
+      }
+      if (entry.symbol === "XEF.TO") {
+        return { ...entry, value: entry.value * xefRatioForCountry };
+      }
+      return entry;
+    });
 
     console.log("set new grid data: " + JSON.stringify(updatedData));
     setGridData(updatedData);
@@ -140,7 +149,7 @@ const Overview = () => {
 
   const isEurope = (item) => {
     var symbol = item.symbol.toUpperCase();
-    if (symbol == "XAW.TO") {
+    if (symbol == "XAW.TO" || symbol == "XEF.TO") {
       return true;
     }
     return false;
@@ -156,7 +165,7 @@ const Overview = () => {
 
   const isJapan = (item) => {
     var symbol = item.symbol.toUpperCase();
-    if (symbol == "XAW.TO" || symbol == "JAPN.TO") {
+    if (symbol == "XAW.TO" || symbol == "JAPN.TO" || symbol == "XEF.TO") {
       return true;
     }
     return false;
@@ -170,9 +179,11 @@ const Overview = () => {
       //EUROPE:  16.5% of XAW
       //JAPAN:  JPN etf + 5.5% of XAW
       //EMERGING:  10% xaw
+      //XEF:  23% japan, 77% europe
       var symbol = item.symbol.toUpperCase();
 
       if (geo == GEO.CANADA) {
+        // debugger;
         if (isCanadian(item)) {
           console.log(symbol + ` `);
           return sum + Number(item.value || 0); // Default to 0 if value is undefined
@@ -190,17 +201,25 @@ const Overview = () => {
       }
 
       if (geo == GEO.EUROPE) {
+        var value = item.value;
         if (isEurope(item)) {
-          return sum + Number(item.value * xawRatio["EUROPE"] || 0); // Default to 0 if value is undefined
+          if (symbol.toUpperCase() == "XAW.TO") {
+            value = value * xawRatio["EUROPE"];
+          } else if (symbol.toUpperCase() == "XEF.TO") {
+            value = value * xefRatio["EUROPE"];
+          }
+          return sum + Number(value || 0); // Default to 0 if value is undefined
         }
       }
 
-      if (geo == GEO.JAPAN) {
+      if (geo == GEO.JAPAN && isJapan(item)) {
+        var value = item.value;
         if (symbol.toUpperCase() == "XAW.TO") {
-          return sum + Number(item.value * xawRatio["JAPAN"] || 0); // Default to 0 if value is undefined
-        } else {
-          return sum + Number(value || 0);
+          value = value * xawRatio["JAPAN"];
+        } else if (symbol.toUpperCase() == "XEF.TO") {
+          value = value * xefRatio["JAPAN"];
         }
+        return sum + Number(value || 0); // Default to 0 if value is undefined
       }
 
       if (geo == GEO.EMERGING) {
