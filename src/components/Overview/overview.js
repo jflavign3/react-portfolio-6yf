@@ -21,6 +21,7 @@ const PIE_STYLE = {
 };
 
 const HOLDING_TYPE = {
+  OTHER: 0,
   STOCKS: 1,
   CPG: 2,
   WORLD_INDEXES: 3,
@@ -247,6 +248,7 @@ const Overview = () => {
     } else if (pieStyle === PIE_STYLE.HOLDING_TYPE) {
       // debugger;
       const holdingsData = [
+        aggregateHoldingsByType(rawData, HOLDING_TYPE.OTHER, "OTHER"),
         aggregateHoldingsByType(rawData, HOLDING_TYPE.STOCKS, "STOCKS"),
         aggregateHoldingsByType(rawData, HOLDING_TYPE.CPG, "CPG"),
         aggregateHoldingsByType(
