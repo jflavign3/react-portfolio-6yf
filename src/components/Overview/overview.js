@@ -120,12 +120,12 @@ const Overview = () => {
       (item.typeId === HOLDING_TYPE.CPG ||
         symbol.endsWith(".TO") ||
         symbol.endsWith(".V")) &&
-      symbol != "EBIT.TO" &&
+      symbol != "FBTC.TO" &&
       symbol != "MNT.TO" &&
       symbol != "XAW.TO" &&
+      symbol != "XEF.TO" &&
       symbol != "VFV.TO" &&
-      symbol != "JAPN.TO" &&
-      symbol != "ZCH.TO"
+      symbol != "JAPN.TO"
     ) {
       return true;
     }
