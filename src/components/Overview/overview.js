@@ -67,7 +67,7 @@ const Overview = () => {
     const data = await GetDbData();
 
     const filteredData = data.filter(
-      (item) => item.typeId === (HOLDING_TYPE[type[0]] ?? HOLDING_TYPE.STOCKS)
+      (item) => item.typeId === (HOLDING_TYPE[type[0]] ?? HOLDING_TYPE.STOCKS),
     );
 
     setGridData(filteredData);
@@ -122,8 +122,10 @@ const Overview = () => {
         symbol.endsWith(".V")) &&
       symbol != "FBTC.TO" &&
       symbol != "MNT.TO" &&
+      symbol != "MNS.TO" &&
       symbol != "XAW.TO" &&
       symbol != "XEF.TO" &&
+      symbol != "XEC.TO" &&
       symbol != "VFV.TO" &&
       symbol != "JAPN.TO"
     ) {
@@ -166,7 +168,12 @@ const Overview = () => {
 
   const isJapan = (item) => {
     var symbol = item.symbol.toUpperCase();
-    if (symbol == "XAW.TO" || symbol == "JAPN.TO" || symbol == "XEF.TO") {
+    if (
+      symbol == "XAW.TO" ||
+      symbol == "JAPN.TO" ||
+      symbol == "XEC.TO" ||
+      symbol == "XEF.TO"
+    ) {
       return true;
     }
     return false;
@@ -239,7 +246,7 @@ const Overview = () => {
 
     if (pieStyle === PIE_STYLE.STOCKS_ONLY) {
       var holdingsData = rawData.filter(
-        (item) => item.typeId === HOLDING_TYPE.STOCKS
+        (item) => item.typeId === HOLDING_TYPE.STOCKS,
       );
       var rows = holdingsData.map((holding) => [
         holding.name,
@@ -254,7 +261,7 @@ const Overview = () => {
         aggregateHoldingsByType(
           rawData,
           HOLDING_TYPE.WORLD_INDEXES,
-          "WORLD_INDEXES"
+          "WORLD_INDEXES",
         ),
       ];
       var rows = holdingsData.map((holding) => [
