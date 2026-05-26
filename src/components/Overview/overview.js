@@ -160,7 +160,7 @@ const Overview = () => {
 
   const isEmerging = (item) => {
     var symbol = item.symbol.toUpperCase();
-    if (symbol == "XAW.TO") {
+    if (symbol == "XAW.TO" || symbol == "XEC.TO") {
       return true;
     }
     return false;
@@ -168,12 +168,7 @@ const Overview = () => {
 
   const isJapan = (item) => {
     var symbol = item.symbol.toUpperCase();
-    if (
-      symbol == "XAW.TO" ||
-      symbol == "JAPN.TO" ||
-      symbol == "XEC.TO" ||
-      symbol == "XEF.TO"
-    ) {
+    if (symbol == "XAW.TO" || symbol == "JAPN.TO" || symbol == "XEF.TO") {
       return true;
     }
     return false;
